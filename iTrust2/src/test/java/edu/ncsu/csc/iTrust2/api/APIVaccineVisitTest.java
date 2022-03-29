@@ -178,6 +178,22 @@ public class APIVaccineVisitTest {
         vaccineVisitForm.setPatient( "patient" );
         vaccineVisitForm.setVaccine( "Moderna" );
         vaccineVisitForm.setDose( "1" );
+        // final List<CPTCode> cptCodes = new ArrayList<CPTCode>();
+
+        // final CPTCode code = new CPTCode();
+        // code.setCode( 111 );
+        // code.setDescription( "Test" );
+        // code.setCost( 1 );
+        // cptCodes.add( code );
+
+        // final CPTCode code2 = new CPTCode();
+        // code2.setCode( 123 );
+        // code2.setDescription( "Test Again" );
+        // code2.setCost( 2 );
+        // cptCodes.add( code2 );
+
+        // cptCodes.add( code2 );
+        // vaccineVisitForm.setCPTCodes( cptCodes );
 
         final VaccineVisit visit = vvService.build( vaccineVisitForm );
 
