@@ -45,7 +45,11 @@ public enum Role {
     /**
      * Vaccinator
      */
-    ROLE_VACCINATOR ( 9, "vaccinator/index" );
+    ROLE_VACCINATOR ( 9, "vaccinator/index" ),
+    /**
+     * Billing staff member
+     */
+    ROLE_BSM ( 10, "bsm/index" ),;
 
     /**
      * Numeric code of the Role
