@@ -87,6 +87,11 @@ public class VaccineVisit extends DomainObject {
     private ZonedDateTime             followUpDate;
 
     /**
+     * The list of CPTCodes for the Vaccine visit
+     */
+    // private List<CPTCode> cptCodes;
+
+    /**
      * Hibernate constructor
      */
     public VaccineVisit () {
@@ -245,6 +250,25 @@ public class VaccineVisit extends DomainObject {
     public void setFollowUpDate ( final ZonedDateTime followUpDate ) {
         this.followUpDate = followUpDate;
     }
+
+    /**
+     * Gets the list of CPTCodes for the visit
+     *
+     * @return the cPTCodes
+     */
+    // public List<CPTCode> getCPTCodes () {
+    // return cptCodes;
+    // }
+
+    /**
+     * Sets the list of CPTCodes for the visit
+     *
+     * @param cPTCodes
+     *            the cPTCodes to set
+     */
+    // public void setCPTCodes ( final List<CPTCode> cptCodes ) {
+    // this.cptCodes = cptCodes;
+    // }
 
     /**
      * Check to see if the patient is old enough for the vaccine.

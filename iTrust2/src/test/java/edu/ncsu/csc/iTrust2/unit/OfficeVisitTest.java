@@ -26,6 +26,7 @@ import edu.ncsu.csc.iTrust2.TestConfig;
 import edu.ncsu.csc.iTrust2.forms.OphthalmologyVisitForm;
 import edu.ncsu.csc.iTrust2.forms.UserForm;
 import edu.ncsu.csc.iTrust2.models.BasicHealthMetrics;
+import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.models.Diagnosis;
 import edu.ncsu.csc.iTrust2.models.Drug;
 import edu.ncsu.csc.iTrust2.models.Hospital;
@@ -198,6 +199,36 @@ public class OfficeVisitTest {
         retrieved = officeVisitService.findAll().get( 0 );
 
         Assert.assertEquals( 2, retrieved.getPrescriptions().size() );
+
+        final List<CPTCode> cptCodes = new ArrayList<CPTCode>();
+
+        final CPTCode code2 = new CPTCode();
+        code2.setCode( 111 );
+        code2.setDescription( "Test" );
+        code2.setCost( 1 );
+        cptCodes.add( code2 );
+        visit.setCPTCodes( cptCodes );
+
+        officeVisitService.save( visit );
+
+        retrieved = officeVisitService.findAll().get( 0 );
+
+        Assert.assertEquals( 1, retrieved.getCPTCodes().size() );
+
+        final CPTCode code3 = new CPTCode();
+        code3.setCode( 123 );
+        code3.setDescription( "Test Again" );
+        code3.setCost( 2 );
+        cptCodes.add( code3 );
+
+        cptCodes.add( code3 );
+        visit.setCPTCodes( cptCodes );
+
+        officeVisitService.save( visit );
+
+        retrieved = officeVisitService.findAll().get( 0 );
+
+        Assert.assertEquals( 2, retrieved.getCPTCodes().size() );
 
     }
 
