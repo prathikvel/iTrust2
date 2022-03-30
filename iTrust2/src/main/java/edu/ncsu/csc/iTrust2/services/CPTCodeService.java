@@ -66,7 +66,7 @@ public class CPTCodeService extends Service<CPTCode, Long> {
         // return repository.findByIsArchiveFalse();
         // }
 
-        return repository.findByIsArchiveFalse();
+        return repository.findByArchiveIsFalse();
 
     }
 
@@ -78,7 +78,7 @@ public class CPTCodeService extends Service<CPTCode, Long> {
         // return repository.findByIsArchiveTrue();
         // }
 
-        return repository.findByIsArchiveTrue();
+        return repository.findByArchiveIsTrue();
 
     }
 

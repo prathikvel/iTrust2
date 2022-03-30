@@ -59,7 +59,7 @@ public class CPTCodeTest {
     @Transactional
     public void testInvalidCodes () {
         final CPTCodeForm form = new CPTCodeForm();
-        form.setCode( "11111" );
+        form.setCode( "111110" );
         form.setDescription( "Invalid" );
         form.setCost( 1 );
 
@@ -71,7 +71,7 @@ public class CPTCodeTest {
             fail();
         }
         catch ( final IllegalArgumentException e ) {
-            assertEquals( "Code not 3 digits: 11", e.getMessage() );
+            assertEquals( "Code not 5 digits: 111110", e.getMessage() );
         }
         form.setCode( "11111" );
         // valid

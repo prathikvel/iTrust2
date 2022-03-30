@@ -20,6 +20,8 @@ public class CPTCodeForm {
     private Long    id;
     /** the cost of the treatment */
     private Integer cost;
+    /** true if cpt code is archived */
+    private boolean archive;
 
     /**
      * Empty constructor
@@ -37,6 +39,7 @@ public class CPTCodeForm {
         setDescription( code.getDescription() );
         setId( code.getId() );
         setCost( code.getCost() );
+        setArchive( code.getArchive() );
     }
 
     /**
@@ -94,6 +97,23 @@ public class CPTCodeForm {
      */
     public Integer getCost () {
         return cost;
+    }
+
+    /**
+     * setter for is archive
+     *
+     * @param b
+     *            true if archived
+     */
+    public void setArchive ( final boolean b ) {
+        archive = b;
+    }
+
+    /**
+     * getter for is archived
+     */
+    public Boolean getArchive () {
+        return archive;
     }
 
     /**
