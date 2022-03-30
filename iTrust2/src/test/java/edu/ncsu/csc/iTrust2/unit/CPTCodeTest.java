@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import edu.ncsu.csc.iTrust2.TestConfig;
-import edu.ncsu.csc.iTrust2.forms.ICDCodeForm;
+import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
 import edu.ncsu.csc.iTrust2.models.CPTCode;
 
 /**
@@ -31,13 +31,13 @@ public class CPTCodeTest {
     @Test
     @Transactional
     public void testCodes () {
-        final CPTCodeForm form = new ICDCodeForm();
+        final CPTCodeForm form = new CPTCodeForm();
         form.setId( 1L );
-        form.setCode( 363 );
+        form.setCode( "00363" );
         form.setDescription( "Testing" );
         form.setCost( 1 );
         final CPTCode base = new CPTCode();
-        base.setCode( 363 );
+        base.setCode( "00363" );
         base.setDescription( "Testing" );
         base.setId( 1L );
         base.setCost( 1 );
@@ -48,7 +48,7 @@ public class CPTCodeTest {
         final CPTCodeForm f2 = new CPTCodeForm( code );
         assertEquals( form, f2 );
 
-        assertEquals( 363, (int) code.getCode() );
+        assertEquals( "00363", code.getCode() );
         assertTrue( code.getId().equals( 1L ) );
         assertEquals( "Testing", code.getDescription() );
         assertEquals( 1, (int) code.getCost() );
@@ -58,8 +58,8 @@ public class CPTCodeTest {
     @Test
     @Transactional
     public void testInvalidCodes () {
-        final CPTCodeForm form = new ICDCodeForm();
-        form.setCode( 11 );
+        final CPTCodeForm form = new CPTCodeForm();
+        form.setCode( "11111" );
         form.setDescription( "Invalid" );
         form.setCost( 1 );
 
@@ -73,7 +73,7 @@ public class CPTCodeTest {
         catch ( final IllegalArgumentException e ) {
             assertEquals( "Code not 3 digits: 11", e.getMessage() );
         }
-        form.setCode( 111 );
+        form.setCode( "11111" );
         // valid
         code = new CPTCode( form );
 

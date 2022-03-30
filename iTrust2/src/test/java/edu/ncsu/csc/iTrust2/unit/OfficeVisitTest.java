@@ -203,7 +203,7 @@ public class OfficeVisitTest {
         final List<CPTCode> cptCodes = new ArrayList<CPTCode>();
 
         final CPTCode code2 = new CPTCode();
-        code2.setCode( 111 );
+        code2.setCode( "11111" );
         code2.setDescription( "Test" );
         code2.setCost( 1 );
         cptCodes.add( code2 );
@@ -216,7 +216,7 @@ public class OfficeVisitTest {
         Assert.assertEquals( 1, retrieved.getCPTCodes().size() );
 
         final CPTCode code3 = new CPTCode();
-        code3.setCode( 123 );
+        code3.setCode( "33123" );
         code3.setDescription( "Test Again" );
         code3.setCost( 2 );
         cptCodes.add( code3 );

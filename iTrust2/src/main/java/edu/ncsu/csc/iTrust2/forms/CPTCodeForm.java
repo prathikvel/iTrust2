@@ -13,13 +13,13 @@ import edu.ncsu.csc.iTrust2.models.CPTCode;
  */
 public class CPTCodeForm {
     /** The CPT code of the treatment */
-    private String code;
+    private String  code;
     /** The description of the treatment */
-    private String description;
+    private String  description;
     /** ID of the CPTCode */
-    private Long   id;
+    private Long    id;
     /** the cost of the treatment */
-    private Long   cost;
+    private Integer cost;
 
     /**
      * Empty constructor
@@ -83,7 +83,7 @@ public class CPTCodeForm {
      * @param d
      *            The new description
      */
-    public void setCost ( final Long c ) {
+    public void setCost ( final Integer c ) {
         cost = c;
     }
 
@@ -92,7 +92,7 @@ public class CPTCodeForm {
      *
      * @return The description
      */
-    public Long getCost () {
+    public Integer getCost () {
         return cost;
     }
 

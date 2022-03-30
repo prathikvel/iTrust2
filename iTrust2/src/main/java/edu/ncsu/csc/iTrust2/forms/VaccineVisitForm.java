@@ -67,7 +67,7 @@ public class VaccineVisitForm implements Serializable {
         setDateTime( ov.getDate().toString() );
         setVaccine( ov.getVaccineType().toString() );
         setDose( ov.getDose().toString() );
-        setCPTCodes( ov.getCPTCodes() );
+        // setCPTCodes( ov.getCPTCodes() );
         if ( ov.getCorrespondingRequest() != null ) {
             setRequestId( ov.getCorrespondingRequest().getId() + "" );
         }
