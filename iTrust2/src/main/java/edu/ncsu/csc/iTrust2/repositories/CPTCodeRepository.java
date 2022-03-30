@@ -24,14 +24,14 @@ public interface CPTCodeRepository extends JpaRepository<CPTCode, Long> {
     public CPTCode findByCode ( String code );
 
     /**
-     * Find all ophthalmology ICD codes
+     * Find all archived CPT codes
      *
      * @return matching codes
      */
     public List<CPTCode> findByIsArchiveTrue ();
 
     /**
-     * Find non-ophthalmology ICD codes
+     * Find all active CPT codes
      *
      * @return matching codes
      */

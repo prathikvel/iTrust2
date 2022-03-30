@@ -135,6 +135,8 @@ public class OfficeVisit extends DomainObject {
     /**
      * List of all CPTCodes for an office visit
      */
+    @OneToMany ( cascade = CascadeType.ALL )
+    @JsonManagedReference
     private List<CPTCode>        cptCodes;
 
     /** For Hibernate/Thymeleaf _must_ be an empty constructor */

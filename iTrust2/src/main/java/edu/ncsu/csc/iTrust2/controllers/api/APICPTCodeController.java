@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
+import edu.ncsu.csc.iTrust2.services.CPTCodeService;
 import edu.ncsu.csc.iTrust2.utils.LoggerUtil;
 
 /**
@@ -41,6 +43,7 @@ public class APICPTCodeController extends APIController {
     @PostMapping ( BASE_PATH + "/CPTCode/add" )
     @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public ResponseEntity createCode ( @RequestBody final CPTCodeForm form ) {
+        return null;
 
     }
 
@@ -57,6 +60,7 @@ public class APICPTCodeController extends APIController {
     @PutMapping ( BASE_PATH + "/CPTCode/{id}" )
     @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public ResponseEntity editCode ( @PathVariable ( "id" ) final Long id, @RequestBody final CPTCodeForm form ) {
+        return null;
 
     }
 
@@ -71,6 +75,7 @@ public class APICPTCodeController extends APIController {
     @DeleteMapping ( BASE_PATH + "/CPTCode/{id}" )
     @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public ResponseEntity deleteCode ( @PathVariable ( "id" ) final Long id ) {
+        return null;
 
     }
 
@@ -82,6 +87,7 @@ public class APICPTCodeController extends APIController {
     @GetMapping ( BASE_PATH + "/CPTCode" )
     @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public ResponseEntity getCode () {
+        return null;
 
     }
 
@@ -93,6 +99,7 @@ public class APICPTCodeController extends APIController {
     @GetMapping ( BASE_PATH + "/CPTCode/history" )
     @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public ResponseEntity getCodeHistory () {
+        return null;
 
     }
 

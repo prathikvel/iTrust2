@@ -1,11 +1,13 @@
 package edu.ncsu.csc.iTrust2.models;
 
-import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
 
 /**
  * Public class for the CPTCodes
@@ -13,6 +15,7 @@ import javax.persistence.Id;
  * @author colinscanlon
  *
  */
+@Entity
 public class CPTCode extends DomainObject {
 
     /**
@@ -25,7 +28,7 @@ public class CPTCode extends DomainObject {
     /**
      * The code of the CPTCode
      */
-    private Integer code;
+    private String  code;
 
     /**
      * The cost of the CPTCode
@@ -40,7 +43,7 @@ public class CPTCode extends DomainObject {
     /**
      * Flag for if the code is archived or not
      */
-    private boolean archive;
+    private boolean isArchive;
 
     /**
      * Empty constructor for Hibernate
@@ -77,7 +80,7 @@ public class CPTCode extends DomainObject {
      *
      */
     @Override
-    public Serializable getId () {
+    public Long getId () {
         return id;
     }
 
@@ -96,18 +99,18 @@ public class CPTCode extends DomainObject {
      *
      * @return the code
      */
-    public Integer getCode () {
+    public String getCode () {
         return code;
     }
 
     /**
      * Sets the code
      *
-     * @param code
+     * @param string
      *            the code to set
      */
-    public void setCode ( final Integer code ) {
-        this.code = code;
+    public void setCode ( final String string ) {
+        this.code = string;
     }
 
     /**
@@ -122,11 +125,11 @@ public class CPTCode extends DomainObject {
     /**
      * Sets the CPTCode cost
      *
-     * @param cost
+     * @param c
      *            the cost to set
      */
-    public void setCost ( final Integer cost ) {
-        this.cost = cost;
+    public void setCost ( final Integer c ) {
+        this.cost = c;
     }
 
     /**
@@ -154,7 +157,7 @@ public class CPTCode extends DomainObject {
      * @return the archive
      */
     public boolean isArchive () {
-        return archive;
+        return isArchive;
     }
 
     /**
@@ -164,7 +167,7 @@ public class CPTCode extends DomainObject {
      *            the archive to set
      */
     public void setArchive ( final boolean archive ) {
-        this.archive = archive;
+        this.isArchive = archive;
     }
 
     @Override
