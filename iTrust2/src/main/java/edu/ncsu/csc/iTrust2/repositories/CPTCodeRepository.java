@@ -28,13 +28,13 @@ public interface CPTCodeRepository extends JpaRepository<CPTCode, Long> {
      *
      * @return matching codes
      */
-    public List<CPTCode> findByIsArchiveTrue ();
+    public List<CPTCode> findByArchiveIsTrue ();
 
     /**
      * Find all active CPT codes
      *
      * @return matching codes
      */
-    public List<CPTCode> findByIsArchiveFalse ();
+    public List<CPTCode> findByArchiveIsFalse ();
 
 }

@@ -360,7 +360,37 @@ public enum TransactionType {
     /**
      * An upcoming Vaccination Certificate was recieved.
      */
-    VACCINATION_CERTIFICATE_GET ( 1802, "Vaccination certificate was downloaded", true );
+    VACCINATION_CERTIFICATE_GET ( 1802, "Vaccination certificate was downloaded", true ),
+
+    /**
+     * A CPT Code was viewed
+     */
+    CPT_CODE_VIEWED ( 2101, "CPT Code was viewed", false ),
+
+    /**
+     * A CPT Code was added
+     */
+    CPT_CODE_ADDED ( 2102, "CPT Code was added", false ),
+
+    /**
+     * A CPT Code was edited
+     */
+    CPT_CODE_EDITED ( 2103, "CPT Code was edited", false ),
+
+    /**
+     * A CPT Code was deleted
+     */
+    CPT_CODE_DELETED ( 2104, "CPT Code was deleted", false ),
+
+    /**
+     * List of active CPT codes viewed
+     */
+    LIST_ACTIVE_CPT_CODES ( 2105, "Active CPT codes viewed", false ),
+
+    /**
+     * List of archived CPT codes viewed
+     */
+    LIST_ARCHIVED_CPT_CODES ( 2106, "Archived CPT codes viewed", false );
 
     /**
      * Creates a TransactionType for logging events

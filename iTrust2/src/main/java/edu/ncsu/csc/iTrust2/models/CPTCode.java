@@ -1,5 +1,6 @@
 package edu.ncsu.csc.iTrust2.models;
 
+import java.time.Instant;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -43,7 +44,7 @@ public class CPTCode extends DomainObject {
     /**
      * Flag for if the code is archived or not
      */
-    private boolean isArchive;
+    private boolean archive;
 
     /**
      * Empty constructor for Hibernate
@@ -63,14 +64,35 @@ public class CPTCode extends DomainObject {
         setDescription( form.getDescription() );
         setId( form.getId() );
         setCost( form.getCost() );
+        setArchive( form.getArchive() );
 
         // validate
         if ( description.length() > 250 ) {
             throw new IllegalArgumentException( "Description too long (250 characters max): " + description );
         }
-        if ( cost != 3 ) {
-            throw new IllegalArgumentException( "Code not 3 digits: " + code );
+        if ( !code.matches( "^[0-9]{5}$" ) ) {
+            throw new IllegalArgumentException( "Code not 5 digits: " + code );
         }
+    }
+
+    /**
+     * this function provides functionality for creating archived cpt codes
+     *
+     * @param delete
+     *            true if code is being deleted false if it is just being edited
+     * @return cpt code for archive
+     */
+    public CPTCode ( final CPTCode code, final Boolean delete ) {
+        if ( delete ) {
+            setCode( code.getCode() + " REMOVED: "
+                    + Instant.ofEpochSecond( Instant.now().getEpochSecond() ).toString() );
+        }
+        else {
+            setCode( code.getCode() + " " + Instant.ofEpochSecond( Instant.now().getEpochSecond() ).toString() );
+        }
+        setArchive( true );
+        setDescription( code.getDescription() );
+        setCost( code.getCost() );
     }
 
     /**
@@ -156,8 +178,8 @@ public class CPTCode extends DomainObject {
      *
      * @return the archive
      */
-    public boolean isArchive () {
-        return isArchive;
+    public boolean getArchive () {
+        return archive;
     }
 
     /**
@@ -167,7 +189,7 @@ public class CPTCode extends DomainObject {
      *            the archive to set
      */
     public void setArchive ( final boolean archive ) {
-        this.isArchive = archive;
+        this.archive = archive;
     }
 
     @Override
