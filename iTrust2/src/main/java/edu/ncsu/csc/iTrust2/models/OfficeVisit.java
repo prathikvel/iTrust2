@@ -132,6 +132,13 @@ public class OfficeVisit extends DomainObject {
     @JoinColumn ( name = "ophthalmologymetrics_id" )
     private OphthalmologyMetrics ophthalmologyMetrics;
 
+    /**
+     * List of all CPTCodes for an office visit
+     */
+    @OneToMany ( cascade = CascadeType.ALL )
+    @JsonManagedReference
+    private List<CPTCode>        cptCodes;
+
     /** For Hibernate/Thymeleaf _must_ be an empty constructor */
     public OfficeVisit () {
     }
@@ -468,6 +475,25 @@ public class OfficeVisit extends DomainObject {
      */
     public void setSatisfactionSurvey ( final SatisfactionSurvey satisfactionSurvey ) {
         this.satisfactionSurvey = satisfactionSurvey;
+    }
+
+    /**
+     * Returns the list of all CPTCodes for the visit
+     *
+     * @return the cPTCodes
+     */
+    public List<CPTCode> getCPTCodes () {
+        return cptCodes;
+    }
+
+    /**
+     * Sets the CPTCodes of the visit
+     *
+     * @param cPTCodes
+     *            the cPTCodes to set
+     */
+    public void setCPTCodes ( final List<CPTCode> cptCodes ) {
+        this.cptCodes = cptCodes;
     }
 
 }

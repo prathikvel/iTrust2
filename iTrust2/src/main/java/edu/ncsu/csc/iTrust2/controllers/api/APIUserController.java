@@ -67,9 +67,12 @@ public class APIUserController extends APIController {
     /** Constant for vaccinator role */
     private static final String       ROLE_VACCINATOR = "ROLE_VACCINATOR";
 
+    /** Constant for billing staff member role */
+    private static final String       ROLE_BSM        = "ROLE_BSM";
+
     /** All roles */
     private static final List<String> ALL_ROLES       = List.of( ROLE_ADMIN, ROLE_PATIENT, ROLE_HCP, ROLE_ER,
-            ROLE_LABTECH, ROLE_VIROLOGIST, ROLE_OD, ROLE_OPH, ROLE_VACCINATOR );
+            ROLE_LABTECH, ROLE_VIROLOGIST, ROLE_OD, ROLE_OPH, ROLE_VACCINATOR, ROLE_BSM );
 
     /** LoggerUtil */
     @Autowired
@@ -262,6 +265,10 @@ public class APIUserController extends APIController {
         userService.save( patient );
 
         userService.save( vaccinator );
+
+        final User bsm = new Personnel( new UserForm( "bsm", "123456", Role.ROLE_BSM, 1 ) );
+
+        userService.save( bsm );
 
         loggerUtil.log( TransactionType.USERS_GENERATED, "" );
 

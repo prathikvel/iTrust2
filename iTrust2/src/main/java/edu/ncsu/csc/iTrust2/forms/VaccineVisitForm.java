@@ -1,7 +1,9 @@
 package edu.ncsu.csc.iTrust2.forms;
 
 import java.io.Serializable;
+import java.util.List;
 
+import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.models.VaccineVisit;
 
 /**
@@ -41,6 +43,11 @@ public class VaccineVisitForm implements Serializable {
     private String            requestId;
 
     /**
+     * The list of CPTCodes for the visit
+     */
+    private List<CPTCode>     cptCodes;
+
+    /**
      * Hibernate constructor
      */
     public VaccineVisitForm () {
@@ -60,6 +67,7 @@ public class VaccineVisitForm implements Serializable {
         setDateTime( ov.getDate().toString() );
         setVaccine( ov.getVaccineType().toString() );
         setDose( ov.getDose().toString() );
+        // setCPTCodes( ov.getCPTCodes() );
         if ( ov.getCorrespondingRequest() != null ) {
             setRequestId( ov.getCorrespondingRequest().getId() + "" );
         }
@@ -233,6 +241,25 @@ public class VaccineVisitForm implements Serializable {
      */
     public static long getSerialversionuid () {
         return serialVersionUID;
+    }
+
+    /**
+     * Gets the CPTCodes of the visit
+     *
+     * @return the cptCodes
+     */
+    public List<CPTCode> getCPTCodes () {
+        return cptCodes;
+    }
+
+    /**
+     * Sets the CPTCodes of the visit
+     *
+     * @param cptCodes
+     *            the cptCodes to set
+     */
+    public void setCPTCodes ( final List<CPTCode> cptCodes ) {
+        this.cptCodes = cptCodes;
     }
 
 }
