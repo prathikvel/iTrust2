@@ -266,6 +266,10 @@ public class APIUserController extends APIController {
 
         userService.save( vaccinator );
 
+        final User bsm = new Personnel( new UserForm( "bsm", "123456", Role.ROLE_BSM, 1 ) );
+
+        userService.save( bsm );
+
         loggerUtil.log( TransactionType.USERS_GENERATED, "" );
 
         return new ResponseEntity( HttpStatus.OK );
