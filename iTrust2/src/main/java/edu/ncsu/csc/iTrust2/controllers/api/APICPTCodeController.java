@@ -72,8 +72,8 @@ public class APICPTCodeController extends APIController {
      * Updates a CPT Code in the active CPT code list with a given ID and adds
      * the old version to the CPT code archive
      *
-     * @param id
-     *            the ID of the CPT code to edit
+     * @param cptcode
+     *            the CPT code to edit
      * @param form
      *            the data for the new CPT code
      * @return the result of the API call
@@ -113,8 +113,8 @@ public class APICPTCodeController extends APIController {
      * Deletes a CPT Code from the active CPT code list with a given ID and adds
      * it to the CPT code archive
      *
-     * @param id
-     *            the ID of the CPT code to edit
+     * @param cptcode
+     *            the CPT code to edit
      * @return the result of the API call
      */
     @DeleteMapping ( BASE_PATH + "/cptcode/{cptcode}" )
@@ -140,8 +140,8 @@ public class APICPTCodeController extends APIController {
     /**
      * Returns a single CPT code by ID
      *
-     * @param id
-     *            the ID of the CPT code to return
+     * @param cptcode
+     *            the CPT code to return
      * @return the result of the API call
      */
     @GetMapping ( BASE_PATH + "/cptcode/{cptcode}" )
@@ -169,7 +169,6 @@ public class APICPTCodeController extends APIController {
      * @return the result of the API call
      */
     @GetMapping ( BASE_PATH + "/cptcode" )
-    @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public List<CPTCode> getCodes () {
         loggerUtil.log( TransactionType.LIST_ACTIVE_CPT_CODES, LoggerUtil.currentUser(), "List all active CPT codes" );
         return service.findAllActive();
