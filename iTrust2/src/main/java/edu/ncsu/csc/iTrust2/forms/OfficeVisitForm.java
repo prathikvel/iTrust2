@@ -583,7 +583,7 @@ public class OfficeVisitForm implements Serializable {
     /**
      * Sets the CPTCodes of the visit
      *
-     * @param cPTCodes
+     * @param cptCodes
      *            the cPTCodes to set
      */
     public void setCPTCodes ( final List<CPTCode> cptCodes ) {
