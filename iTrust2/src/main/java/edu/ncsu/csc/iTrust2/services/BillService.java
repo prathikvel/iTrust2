@@ -13,6 +13,8 @@ import edu.ncsu.csc.iTrust2.models.User;
 import edu.ncsu.csc.iTrust2.repositories.BillRepository;
 
 /**
+ * Service class for interacting with Bill model, performing CRUD tasks with
+ * database.
  *
  * @author colinscanlon
  *

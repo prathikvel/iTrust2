@@ -8,6 +8,8 @@ import edu.ncsu.csc.iTrust2.models.Bill;
 import edu.ncsu.csc.iTrust2.models.User;
 
 /**
+ * Repository for interacting with Bill model. Method implementations generated
+ * by Spring
  *
  * @author colinscanlon
  *

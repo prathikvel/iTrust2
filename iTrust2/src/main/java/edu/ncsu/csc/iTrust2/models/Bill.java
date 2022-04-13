@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,12 +15,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.JsonAdapter;
 
 import edu.ncsu.csc.iTrust2.adapters.ZonedDateTimeAdapter;
 import edu.ncsu.csc.iTrust2.adapters.ZonedDateTimeAttributeConverter;
 
+/**
+ * representation of a Bill in the iTrust2 System
+ *
+ * @author Jon
+ * @author Colin
+ *
+ */
+@Entity
 public class Bill extends DomainObject {
 
     /**
@@ -59,7 +67,6 @@ public class Bill extends DomainObject {
      * List of all CPTCodes for a Bill
      */
     @OneToMany ( cascade = CascadeType.ALL )
-    @JsonManagedReference
     private List<CPTCode> cptCodes;
 
     /**
@@ -77,6 +84,43 @@ public class Bill extends DomainObject {
      */
     public Bill () {
 
+    }
+
+    /**
+     * Bill constructor
+     */
+    public Bill ( final Patient patient, final Personnel hcp, final List<CPTCode> codes ) {
+        setPatient( patient );
+        setHcp( hcp );
+        setCptCodes( codes );
+        int cost = 0;
+        for ( int i = 0; i < codes.size(); i++ ) {
+            cost += codes.get( i ).getCost();
+        }
+        setCost( cost );
+        setStatus( "Unpaid" );
+        setDate( ZonedDateTime.now() );
+    }
+
+    /**
+     * method to pay bill
+     *
+     * @param pay
+     *            amount being paid
+     * @return true if payment occurs
+     */
+    public Boolean pay ( final int pay ) {
+        if ( !status.equals( "Fully Paid" ) && pay <= cost ) {
+            cost -= pay;
+            if ( cost == 0 ) {
+                setStatus( "Fully Paid" );
+            }
+            else {
+                setStatus( "Partially Paid" );
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
