@@ -8,6 +8,12 @@ import javax.validation.constraints.NotEmpty;
 import edu.ncsu.csc.iTrust2.models.Bill;
 import edu.ncsu.csc.iTrust2.models.CPTCode;
 
+/**
+ * The Bill Form class
+ *
+ * @author colinscanlon
+ *
+ */
 public class BillForm implements Serializable {
     /**
      * Serial Version of the Form. For the Serializable
@@ -53,10 +59,19 @@ public class BillForm implements Serializable {
      */
     private String            cost;
 
+    /**
+     * Empty hibernate constructor
+     */
     public BillForm () {
 
     }
 
+    /**
+     * Constructor for building a form from a bill
+     *
+     * @param bill
+     *            the bill
+     */
     public BillForm ( final Bill bill ) {
         setPatient( bill.getPatient().getUsername() );
         setHcp( bill.getHcp().getUsername() );
@@ -68,6 +83,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * Gets the patient
+     *
      * @return the patient
      */
     public String getPatient () {
@@ -75,6 +92,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * sets the patient
+     *
      * @param patient
      *            the patient to set
      */
@@ -83,6 +102,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * gets the hcp
+     *
      * @return the hcp
      */
     public String getHcp () {
@@ -90,6 +111,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * sets the hcp
+     *
      * @param hcp
      *            the hcp to set
      */
@@ -98,6 +121,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * gets the date
+     *
      * @return the date
      */
     public String getDate () {
@@ -105,6 +130,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * Sets the date
+     *
      * @param date
      *            the date to set
      */
@@ -113,6 +140,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * Gets the id
+     *
      * @return the id
      */
     public String getId () {
@@ -120,6 +149,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * sets the ID
+     *
      * @param id
      *            the id to set
      */
@@ -128,6 +159,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * gets the status
+     *
      * @return the status
      */
     public String getStatus () {
@@ -135,6 +168,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * sets the status
+     *
      * @param status
      *            the status to set
      */
@@ -143,6 +178,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * gets the cpt codes
+     *
      * @return the cptCodes
      */
     public List<CPTCode> getCptCodes () {
@@ -150,6 +187,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * sets the cptcodes
+     *
      * @param cptCodes
      *            the cptCodes to set
      */
@@ -158,6 +197,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * gets the cost
+     *
      * @return the cost
      */
     public String getCost () {
@@ -165,6 +206,8 @@ public class BillForm implements Serializable {
     }
 
     /**
+     * sets the cost
+     *
      * @param cost
      *            the cost to set
      */

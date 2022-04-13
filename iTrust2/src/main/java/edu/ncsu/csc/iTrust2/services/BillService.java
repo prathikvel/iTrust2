@@ -13,6 +13,7 @@ import edu.ncsu.csc.iTrust2.models.User;
 import edu.ncsu.csc.iTrust2.repositories.BillRepository;
 
 /**
+ * Service class for bills
  *
  * @author colinscanlon
  *
@@ -30,13 +31,13 @@ public class BillService extends Service<Bill, Long> {
         return repository;
     }
 
-    @Override
-    public List<Bill> findAll () {
-
-        return repository.findAll();
-
-    }
-
+    /**
+     * Gets a list of bills for a patient
+     *
+     * @param patient
+     *            The patient to get bills for
+     * @return The list of bills
+     */
     public List<Bill> findByPatient ( final User patient ) {
 
         return repository.findByPatient( patient );
