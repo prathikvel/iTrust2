@@ -25,6 +25,7 @@ import edu.ncsu.csc.iTrust2.adapters.ZonedDateTimeAttributeConverter;
  * Class for bills
  *
  * @author colinscanlon
+ * @author jmbuck4
  *
  */
 @Entity
@@ -85,6 +86,43 @@ public class Bill extends DomainObject {
      */
     public Bill () {
 
+    }
+
+    /**
+     * Bill constructor
+     */
+    public Bill ( final Patient patient, final Personnel hcp, final List<CPTCode> codes ) {
+        setPatient( patient );
+        setHcp( hcp );
+        setCptCodes( codes );
+        int cost = 0;
+        for ( int i = 0; i < codes.size(); i++ ) {
+            cost += codes.get( i ).getCost();
+        }
+        setCost( cost );
+        setStatus( "Unpaid" );
+        setDate( ZonedDateTime.now() );
+    }
+
+    /**
+     * method to pay bill
+     *
+     * @param pay
+     *            amount being paid
+     * @return true if payment occurs
+     */
+    public Boolean pay ( final int pay ) {
+        if ( !status.equals( "Fully Paid" ) && pay <= cost ) {
+            cost -= pay;
+            if ( cost == 0 ) {
+                setStatus( "Fully Paid" );
+            }
+            else {
+                setStatus( "Partially Paid" );
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
