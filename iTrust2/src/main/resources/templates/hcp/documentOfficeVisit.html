@@ -351,6 +351,10 @@
                             $scope.visit.date = date.toISOString();
                         }
                         
+                        if ($scope.apptcptcodes.length == 0) {
+                            $scope.errorMsg += "Please input at least one CPT code\n";
+                        }
+                        
                         /*Submitting Office Visits by type*/
                         if ($scope.visit.type === 'GENERAL_CHECKUP' ||
                         		$scope.visit.type === 'GENERAL_OPHTHALMOLOGY') {
