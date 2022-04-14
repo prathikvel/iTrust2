@@ -108,4 +108,17 @@ public class PatientController {
         return "/patient/vaccination-history";
     }
 
+    /**
+     * Create a page for the patient to view bills
+     *
+     * @param model
+     *            data for front end
+     * @return The page for the patient to view bills
+     */
+    @GetMapping ( value = "patient/bills" )
+    @PreAuthorize ( "hasRole('ROLE_PATIENT')" )
+    public String viewBills ( final Model model ) {
+        return "/patient/viewBilling/viewBills";
+    }
+
 }
