@@ -1,15 +1,17 @@
 package edu.ncsu.csc.iTrust2.controllers.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ncsu.csc.iTrust2.models.Bill;
+import edu.ncsu.csc.iTrust2.models.Patient;
+import edu.ncsu.csc.iTrust2.models.enums.TransactionType;
 import edu.ncsu.csc.iTrust2.services.BillService;
 import edu.ncsu.csc.iTrust2.services.PatientService;
 import edu.ncsu.csc.iTrust2.utils.LoggerUtil;
@@ -45,8 +47,31 @@ public class APIBillController extends APIController {
      */
     @GetMapping ( BASE_PATH + "/bills/{username}" )
     @PreAuthorize ( "hasRole('ROLE_BSM')" )
-    public ResponseEntity getBillsbyPatient ( @PathVariable ( "username" ) final String username ) {
-        return null;
+    public List<Bill> getBillsbyPatient ( @PathVariable ( "username" ) final String username ) {
+
+        // logging right away
+        loggerUtil.log( TransactionType.LIST_BILLS_BY, LoggerUtil.currentUser(), "Patient bills viewed" );
+
+        // the patient in question
+        final Patient patient = (Patient) patientService.findByName( username );
+        if ( patient == null ) {
+            // return an empty array list
+            return new ArrayList<Bill>();
+        }
+
+        // otherwise
+        final List<Bill> patientBills = new ArrayList<Bill>();
+        final List<Bill> allBills = billService.findAll(); // all the bills
+
+        for ( int i = 0; i < allBills.size(); i++ ) {
+            if ( patient.equals( allBills.get( i ).getPatient() ) ) {
+                patientBills.add( allBills.get( i ) );
+            }
+        }
+
+        // coallesced, so we can return
+        return patientBills;
+
     }
 
     /**
@@ -57,7 +82,7 @@ public class APIBillController extends APIController {
     @GetMapping ( BASE_PATH + "/bills/" )
     @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public List<Bill> getBills () {
-        loggerUtil.log( null, LoggerUtil.currentUser(), "List all bills" );
+        loggerUtil.log( TransactionType.LIST_ALL_BILLS, LoggerUtil.currentUser(), "List all bills" );
         return billService.findAll();
     }
 }
