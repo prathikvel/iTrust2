@@ -42,6 +42,30 @@ public class APIBillController extends APIController {
     private PatientService patientService;
 
     /**
+     * Returns a particular bill
+     *
+     * @param username
+     *            the name of the patient
+     * @return the result of the API call
+     */
+    @GetMapping ( BASE_PATH + "/bills/{id}" )
+    @PreAuthorize ( "hasRole('ROLE_BSM')" )
+    public ResponseEntity getBillsbyId ( @PathVariable ( "id" ) final Long id ) {
+
+        // logging right away
+
+        // the bill in question
+        final Bill bill = billService.findById( id );
+        if ( bill == null ) {
+            return new ResponseEntity( errorResponse( "Bill doesn't exist" ), HttpStatus.NOT_FOUND );
+        }
+
+        // otherwise
+        loggerUtil.log( TransactionType.LIST_BILLS, LoggerUtil.currentUser(), "bill viewed" );
+        return new ResponseEntity( bill, HttpStatus.OK );
+    }
+
+    /**
      * Returns the bills associated with
      *
      * @param username
