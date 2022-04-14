@@ -100,6 +100,7 @@ public class BillTest {
         assertEquals( per2, out.getHcp() );
         assertEquals( pat1, out.getPatient() );
         assertEquals( codes, out.getCptCodes() );
+        assertEquals( 3, out.getCptCodes().size() );
         assertEquals( (Integer) 35, out.getCost() );
 
         assertTrue( out.pay( 35 ) );

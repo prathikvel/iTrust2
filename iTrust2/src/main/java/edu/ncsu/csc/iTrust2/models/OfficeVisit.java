@@ -264,11 +264,11 @@ public class OfficeVisit extends DomainObject {
     /**
      * Set the patient of this office visit
      *
-     * @param patient
+     * @param user
      *            the patient to set this office visit to
      */
-    public void setPatient ( final User patient ) {
-        this.patient = patient;
+    public void setPatient ( final User user ) {
+        this.patient = user;
     }
 
     /**
@@ -283,11 +283,11 @@ public class OfficeVisit extends DomainObject {
     /**
      * Set the hcp of this office visit
      *
-     * @param hcp
+     * @param user
      *            the hcp to set this office visit to
      */
-    public void setHcp ( final User hcp ) {
-        this.hcp = hcp;
+    public void setHcp ( final User user ) {
+        this.hcp = user;
     }
 
     /**

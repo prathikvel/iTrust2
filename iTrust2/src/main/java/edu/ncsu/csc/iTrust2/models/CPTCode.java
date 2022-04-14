@@ -50,9 +50,19 @@ public class CPTCode extends DomainObject {
      */
     private boolean           archive;
 
+    /**
+     * list of visits associated with cpt code
+     */
     @ManyToMany ( mappedBy = "cptCodes" )
     @JsonBackReference
     private List<OfficeVisit> officeVisits;
+
+    /**
+     * list of bills associated with cpt codes
+     */
+    @ManyToMany ( mappedBy = "cptCodes" )
+    @JsonBackReference
+    private List<Bill>        bills;
 
     /**
      * Empty constructor for Hibernate
