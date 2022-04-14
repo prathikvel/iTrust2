@@ -14,7 +14,7 @@
 				$scope.bills = [];
 				$scope.loadTable = function() {
 					// get list of icd codes from rest api
-					$http.get("/iTrust2/api/v1/bills/").then(
+					$http.get("/iTrust2/api/v1/bills/patient").then(
 							function(response) {
 								$scope.bills = response.data; // or just response?
 								$scope.message = "";

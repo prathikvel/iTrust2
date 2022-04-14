@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.JsonAdapter;
 
 import edu.ncsu.csc.iTrust2.adapters.ZonedDateTimeAdapter;
