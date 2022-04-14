@@ -2,13 +2,12 @@ package edu.ncsu.csc.iTrust2.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,22 +35,22 @@ import edu.ncsu.csc.iTrust2.services.PersonnelService;
 @AutoConfigureMockMvc
 public class APIBillControllerTest {
 
-    private MockMvc               mvc;
+    private MockMvc                 mvc;
 
     @Autowired
-    private WebApplicationContext context;
+    private WebApplicationContext   context;
 
     @Autowired
-    private BillService           billService;
+    private BillService             billService;
 
     @Autowired
-    private PatientService        patientService;
+    private PatientService<Patient> patientService;
 
     @Autowired
-    private PersonnelService      personnelService;
+    private PersonnelService        personnelService;
 
     @Autowired
-    private CPTCodeService        codeService;
+    private CPTCodeService          codeService;
 
     /**
      * Sets up test
@@ -62,46 +61,45 @@ public class APIBillControllerTest {
         mvc = MockMvcBuilders.webAppContextSetup( context ).build();
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @SuppressWarnings ( { "unchecked", "deprecation" } )
     @Test
     @Transactional
     @WithMockUser ( username = "billing staff member", roles = { "USER", "BSM" } )
     public void testRetrievingBills () throws Exception {
 
-        // add in a patient first
-        final Patient clyde = new Patient( new UserForm( "patient", "123456", Role.ROLE_PATIENT, 1 ) );
-        final Personnel billingStaff = new Personnel( new UserForm( "bsm", "654322", Role.ROLE_HCP, 1 ) );
+        patientService.save( new Patient( new UserForm( "patient", "123456", Role.ROLE_PATIENT, 1 ) ) );
+        personnelService.save( new Personnel( new UserForm( "hcp", "654322", Role.ROLE_HCP, 1 ) ) );
+        final Patient pat1 = patientService.findAll().get( 0 );
+        final Personnel per2 = personnelService.findAll().get( 0 );
 
-        // patients and personnel get added to the database
-        patientService.save( clyde );
-        personnelService.save( billingStaff );
+        final CPTCode cost1 = new CPTCode();
+        cost1.setCode( "00363" );
+        cost1.setDescription( "Bandaid" );
+        cost1.setId( 1L );
+        cost1.setCost( 10 );
 
-        // add in cpt codes
-        final CPTCode surgeryCode = new CPTCode();
-        surgeryCode.setCode( "21000" );
-        surgeryCode.setDescription( "Musculoskeletal" );
-        surgeryCode.setId( 1L );
-        surgeryCode.setCost( 10 );
+        final CPTCode cost2 = new CPTCode();
+        cost2.setCode( "00364" );
+        cost2.setDescription( "neosporin" );
+        cost2.setId( 2L );
+        cost2.setCost( 15 );
 
-        final CPTCode therapyCode = new CPTCode();
-        surgeryCode.setCode( "90832" );
-        surgeryCode.setDescription( "30 minutes of psychotherapy" );
-        surgeryCode.setId( 2L );
-        surgeryCode.setCost( 10 );
+        final CPTCode cost3 = new CPTCode();
+        cost3.setCode( "00365" );
+        cost3.setDescription( "Application" );
+        cost3.setId( 3L );
+        cost3.setCost( 10 );
 
-        // merely coalescing the cpt codes
-        final List<CPTCode> codes = new ArrayList<CPTCode>();
+        codeService.save( cost1 );
+        codeService.save( cost2 );
+        codeService.save( cost3 );
 
-        codes.add( surgeryCode );
-        codes.add( therapyCode );
-
-        // codes going in database
-        codeService.save( surgeryCode );
-        codeService.save( therapyCode );
+        final List<CPTCode> codes = codeService.findAll();
 
         // make a bill, store it in the database
-        final Bill billClyde = new Bill(); // missing "clyde, billingStaff,
-                                           // codes"
+        final Bill billClyde = new Bill( pat1, per2, codes ); // missing "clyde,
+                                                              // billingStaff,
+        // codes"
         // for now
         billService.save( billClyde );
 

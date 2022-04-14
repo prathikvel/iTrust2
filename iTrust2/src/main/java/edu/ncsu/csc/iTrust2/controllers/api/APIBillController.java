@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,15 +47,14 @@ public class APIBillController extends APIController {
      *            the name of the patient
      * @return the result of the API call
      */
-    @GetMapping ( BASE_PATH + "/bills/{username}" )
-    @PreAuthorize ( "hasRole('ROLE_BSM')" )
-    public List<Bill> getBillsbyPatient ( @PathVariable ( "username" ) final String username ) {
+    @GetMapping ( BASE_PATH + "/bills/patient" )
+    public List<Bill> getBillsbyPatient () {
 
         // logging right away
         loggerUtil.log( TransactionType.LIST_BILLS_BY, LoggerUtil.currentUser(), "Patient bills viewed" );
 
         // the patient in question
-        final Patient patient = (Patient) patientService.findByName( username );
+        final Patient patient = (Patient) patientService.findByName( LoggerUtil.currentUser() );
         if ( patient == null ) {
             // return an empty array list
             return new ArrayList<Bill>();
@@ -84,5 +85,13 @@ public class APIBillController extends APIController {
     public List<Bill> getBills () {
         loggerUtil.log( TransactionType.LIST_ALL_BILLS, LoggerUtil.currentUser(), "List all bills" );
         return billService.findAll();
+    }
+
+    @GetMapping ( BASE_PATH + "/bills/{id}" )
+    public ResponseEntity getBill ( @PathVariable ( "id" ) final Long id ) {
+        final Bill b = billService.findById( id );
+        loggerUtil.log( TransactionType.VIEW_BILL, LoggerUtil.currentUser(), "Retrieved bill with id " + id );
+        return null == b ? new ResponseEntity( errorResponse( "No Bill found for id " + id ), HttpStatus.NOT_FOUND )
+                : new ResponseEntity( b, HttpStatus.OK );
     }
 }

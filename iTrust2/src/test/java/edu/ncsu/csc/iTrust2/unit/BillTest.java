@@ -92,6 +92,8 @@ public class BillTest {
 
         final List<CPTCode> codes = codeService.findAll();
 
+        assertEquals( 3, codes.size() );
+
         final Bill bill = new Bill( pat1, per2, codes );
         service.save( bill );
 
