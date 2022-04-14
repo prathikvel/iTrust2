@@ -8,8 +8,7 @@ import edu.ncsu.csc.iTrust2.models.Bill;
 import edu.ncsu.csc.iTrust2.models.User;
 
 /**
- * Repository for interacting with Bill model. Method implementations generated
- * by Spring
+ * Repository interface for bills
  *
  * @author colinscanlon
  *
@@ -19,7 +18,7 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     /**
      * Finds an Bill by the provided id
      *
-     * @param code
+     * @param patient
      *            Code to search by
      * @return Matching code, if any
      */
