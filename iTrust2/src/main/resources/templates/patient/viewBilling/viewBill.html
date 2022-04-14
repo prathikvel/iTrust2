@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: head(title=~{::title},links=~{})">
+<title>View Bill</title>
+</head>
+<body th:include="layout :: body" th:with="content=~{::content}">
+	<div th:fragment="content">
+
+		<script th:inline="javascript">
+		/* Otherwise Thymeleaf tries to parse Javascript as XML and breaks itself sometimes.  Sigh */
+		/*<![CDATA[*/
+			var app = angular.module("viewBillApp", []);
+			app.controller('viewBillCtrl', function($scope, $http) {
+
+				$scope.bill = [];
+				$scope.loadTable = function() {
+					// get list of icd codes from rest api
+					$http.get("/iTrust2/api/v1/bills").then(
+							function(response) {
+								$scope.bill = response.data; // or just response?
+								$scope.message = "";
+							}, function(rejection) {
+								$scope.codes = [];
+								$scope.message = "Could not display bill";
+							});
+				}
+				
+				// load table upon page loading
+				$scope.loadTable();
+			});
+			/*]]>*/
+		</script>
+
+		<div ng-app="viewBillApp" ng-controller="viewBillCtrl">
+			<!-- Info on tables from https://hello-angularjs.appspot.com/removetablerow -->
+			<h4 style="color: red" ng-model="message"></h4>
+
+			<h1>Bill</h1>
+			<p>Patient: {{bill.patient}}</p>
+			<p>Office Visit Date: {{bill.date}}</p>
+			<p>Attending Health Care Professional: {{bill.hcp}}</p>
+			<table class="table">
+				<tr>
+					<th>CPT Code</th>
+					<th>Description</th>
+					<th>Cost</th>
+				</tr>
+				<tr name="codeRow" ng-repeat="c in bill.cptCodes | orderBy: 'code'"
+					codeId={{c.id}}>
+					<td name="codeCell">{{c.code}}</td>
+					<td name="descriptionCell">{{c.description}}</td>
+					<td name="costCell">{{c.cost}}</td>
+				</tr>
+			</table>
+			
+			<p>Total: {{bill.cost}}</p>
+			<p>Bill Status: {{bill.status}}</p>
+		</div>
+	</div>
+</body>
+</html>
