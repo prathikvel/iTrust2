@@ -22,6 +22,7 @@ import edu.ncsu.csc.iTrust2.utils.LoggerUtil;
  * Class that provided the REST endpoints for dealing with Bills, deletion,
  * updating, and viewing.
  *
+ * @author Remy
  * @author Jonathan Buck
  *
  */
