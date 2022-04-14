@@ -10,10 +10,12 @@
 		/*<![CDATA[*/
 			var app = angular.module("payBillApp", []);
 			app.controller('payBillCtrl', function($scope, $http) {
+				$scope.pathname = window.location.pathname;
+				$scope.billId = $scope.pathname.substring($scope.pathname.lastIndexOf('/') + 1);
 
 				$scope.bill = [];
 				$scope.loadTable = function() {
-					$http.get("/iTrust2/api/v1/bills/").then(
+					$http.get("/iTrust2/api/v1/bills/" + $scope.billId).then(
 							function(response) {
 								$scope.bill = response.data; // or just response?
 								$scope.message = "";
