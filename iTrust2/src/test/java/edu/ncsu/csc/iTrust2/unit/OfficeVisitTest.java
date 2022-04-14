@@ -41,6 +41,7 @@ import edu.ncsu.csc.iTrust2.models.enums.AppointmentType;
 import edu.ncsu.csc.iTrust2.models.enums.HouseholdSmokingStatus;
 import edu.ncsu.csc.iTrust2.models.enums.Role;
 import edu.ncsu.csc.iTrust2.services.BasicHealthMetricsService;
+import edu.ncsu.csc.iTrust2.services.CPTCodeService;
 import edu.ncsu.csc.iTrust2.services.DrugService;
 import edu.ncsu.csc.iTrust2.services.HospitalService;
 import edu.ncsu.csc.iTrust2.services.ICDCodeService;
@@ -73,6 +74,9 @@ public class OfficeVisitTest {
 
     @Autowired
     private PrescriptionService       prescriptionService;
+
+    @Autowired
+    private CPTCodeService            cptCodeService;
 
     @Before
     public void setup () {
@@ -208,6 +212,7 @@ public class OfficeVisitTest {
         code2.setCost( 1 );
         cptCodes.add( code2 );
         visit.setCPTCodes( cptCodes );
+        cptCodeService.save( code2 );
 
         officeVisitService.save( visit );
 
@@ -220,14 +225,12 @@ public class OfficeVisitTest {
         code3.setDescription( "Test Again" );
         code3.setCost( 2 );
         cptCodes.add( code3 );
-
-        cptCodes.add( code3 );
         visit.setCPTCodes( cptCodes );
-        /*
-         * officeVisitService.save( visit ); retrieved =
-         * officeVisitService.findAll().get( 0 ); Assert.assertEquals( 2,
-         * retrieved.getCPTCodes().size() );
-         */
+        cptCodeService.save( code3 );
+
+        officeVisitService.save( visit );
+        retrieved = officeVisitService.findAll().get( 0 );
+        Assert.assertEquals( 2, retrieved.getCPTCodes().size() );
 
     }
 

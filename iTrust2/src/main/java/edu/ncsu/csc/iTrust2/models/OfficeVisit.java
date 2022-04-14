@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -135,7 +137,9 @@ public class OfficeVisit extends DomainObject {
     /**
      * List of all CPTCodes for an office visit
      */
-    @OneToMany ( cascade = CascadeType.ALL )
+    @ManyToMany ( cascade = CascadeType.MERGE )
+    @JoinTable ( name = "OVISIT_CODES", joinColumns = { @JoinColumn ( name = "visit_id" ) },
+            inverseJoinColumns = { @JoinColumn ( name = "cptcode_id" ) } )
     @JsonManagedReference
     private List<CPTCode>        cptCodes;
 
@@ -227,6 +231,25 @@ public class OfficeVisit extends DomainObject {
                 || bhm.getWeight() == null ) {
             throw new IllegalArgumentException( "Not all necessary fields for basic health metrics were submitted." );
         }
+    }
+
+    /**
+     * getter for cpt codes
+     *
+     * @return cpt codes
+     */
+    public List<CPTCode> getCptCodes () {
+        return cptCodes;
+    }
+
+    /**
+     * setter for cptcodes
+     *
+     * @param cptCodes
+     *            cpt codes
+     */
+    public void setCptCodes ( final List<CPTCode> cptCodes ) {
+        this.cptCodes = cptCodes;
     }
 
     /**

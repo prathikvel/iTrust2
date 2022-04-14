@@ -2,6 +2,7 @@ package edu.ncsu.csc.iTrust2.services;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import edu.ncsu.csc.iTrust2.forms.OfficeVisitForm;
 import edu.ncsu.csc.iTrust2.forms.PrescriptionForm;
 import edu.ncsu.csc.iTrust2.models.AppointmentRequest;
+import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.models.Diagnosis;
 import edu.ncsu.csc.iTrust2.models.OfficeVisit;
 import edu.ncsu.csc.iTrust2.models.Patient;
@@ -79,6 +81,12 @@ public class OfficeVisitService extends Service<OfficeVisit, Long> {
      */
     @Autowired
     private DiagnosisService            diagnosisService;
+
+    /**
+     * CPT Code service
+     */
+    @Autowired
+    private CPTCodeService              cptCodeService;
 
     @Override
     protected JpaRepository<OfficeVisit, Long> getRepository () {
@@ -182,6 +190,15 @@ public class OfficeVisitService extends Service<OfficeVisit, Long> {
             for ( final Diagnosis d : ov.getDiagnoses() ) {
                 d.setVisit( ov );
             }
+        }
+
+        if ( ovf.getCPTCodes() != null ) {
+            final List<CPTCode> codes = new ArrayList<CPTCode>();
+
+            ov.setCPTCodes( ovf.getCPTCodes().stream().map( cptCodeService::build ).collect( Collectors.toList() ) );
+            // for ( final CPTCode c : ov.getCPTCodes() ) {
+            // c.addVisit( ov );
+            // }
         }
 
         ov.validateDiagnoses();

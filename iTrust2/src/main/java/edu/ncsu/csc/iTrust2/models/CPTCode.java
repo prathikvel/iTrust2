@@ -1,12 +1,16 @@
 package edu.ncsu.csc.iTrust2.models;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
 
@@ -24,27 +28,31 @@ public class CPTCode extends DomainObject {
      */
     @Id
     @GeneratedValue ( strategy = GenerationType.AUTO )
-    private Long    id;
+    private Long              id;
 
     /**
      * The code of the CPTCode
      */
-    private String  code;
+    private String            code;
 
     /**
      * The cost of the CPTCode
      */
-    private Integer cost;
+    private Integer           cost;
 
     /**
      * Description of the diagnosis
      */
-    private String  description;
+    private String            description;
 
     /**
      * Flag for if the code is archived or not
      */
-    private boolean archive;
+    private boolean           archive;
+
+    @ManyToMany ( mappedBy = "cptCodes" )
+    @JsonBackReference
+    private List<OfficeVisit> officeVisits;
 
     /**
      * Empty constructor for Hibernate
@@ -181,6 +189,25 @@ public class CPTCode extends DomainObject {
      */
     public boolean getArchive () {
         return archive;
+    }
+
+    /**
+     * getter for office visits
+     *
+     * @return officevists
+     */
+    public List<OfficeVisit> getOfficeVisits () {
+        return officeVisits;
+    }
+
+    /**
+     * setter for office visits
+     *
+     * @param officeVisits
+     *            office visits
+     */
+    public void setOfficeVisits ( final List<OfficeVisit> officeVisits ) {
+        this.officeVisits = officeVisits;
     }
 
     /**
