@@ -71,15 +71,14 @@ public class APIBillController extends APIController {
      *            the name of the patient
      * @return the result of the API call
      */
-    @GetMapping ( BASE_PATH + "/bills/{username}" )
-    @PreAuthorize ( "hasRole('ROLE_BSM')" )
-    public List<Bill> getBillsbyPatient ( @PathVariable ( "username" ) final String username ) {
+    @GetMapping ( BASE_PATH + "/bills/patient" )
+    public List<Bill> getBillsbyPatient () {
 
         // logging right away
         loggerUtil.log( TransactionType.LIST_BILLS_BY, LoggerUtil.currentUser(), "Patient bills viewed" );
 
         // the patient in question
-        final Patient patient = (Patient) patientService.findByName( username );
+        final Patient patient = (Patient) patientService.findByName( LoggerUtil.currentUser() );
         if ( patient == null ) {
             // return an empty array list
             return new ArrayList<Bill>();
