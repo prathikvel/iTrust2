@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ncsu.csc.iTrust2.forms.OfficeVisitForm;
+import edu.ncsu.csc.iTrust2.models.Bill;
 import edu.ncsu.csc.iTrust2.models.OfficeVisit;
 import edu.ncsu.csc.iTrust2.models.User;
 import edu.ncsu.csc.iTrust2.models.enums.TransactionType;
+import edu.ncsu.csc.iTrust2.services.BillService;
 import edu.ncsu.csc.iTrust2.services.OfficeVisitService;
 import edu.ncsu.csc.iTrust2.services.UserService;
 import edu.ncsu.csc.iTrust2.utils.LoggerUtil;
@@ -26,6 +28,7 @@ import edu.ncsu.csc.iTrust2.utils.LoggerUtil;
  * CRUD routes as appropriate for different user types
  *
  * @author Kai Presler-Marshall
+ * @author jmbuck4
  *
  */
 @RestController
@@ -35,6 +38,10 @@ public class APIOfficeVisitController extends APIController {
     /** OfficeVisit service */
     @Autowired
     private OfficeVisitService officeVisitService;
+
+    /** Bill service */
+    @Autowired
+    private BillService        billService;
 
     /** User service */
     @Autowired
@@ -122,7 +129,11 @@ public class APIOfficeVisitController extends APIController {
                         errorResponse( "Office visit with the id " + visit.getId() + " already exists" ),
                         HttpStatus.CONFLICT );
             }
+
+            final Bill bill = new Bill( visit.getPatient(), visit.getHcp(), visit.getCptCodes() );
+            billService.save( bill );
             officeVisitService.save( visit );
+
             loggerUtil.log( TransactionType.GENERAL_CHECKUP_CREATE, LoggerUtil.currentUser(),
                     visit.getPatient().getUsername() );
             return new ResponseEntity( visit, HttpStatus.OK );

@@ -11,8 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -25,6 +26,7 @@ import edu.ncsu.csc.iTrust2.adapters.ZonedDateTimeAttributeConverter;
  * Class for bills
  *
  * @author colinscanlon
+ * @author jmbuck4
  *
  */
 @Entity
@@ -66,7 +68,9 @@ public class Bill extends DomainObject {
     /**
      * List of all CPTCodes for a Bill
      */
-    @OneToMany ( cascade = CascadeType.ALL )
+    @ManyToMany ( cascade = CascadeType.MERGE )
+    @JoinTable ( name = "BILL_CODES", joinColumns = { @JoinColumn ( name = "bill_id" ) },
+            inverseJoinColumns = { @JoinColumn ( name = "cptcode_id" ) } )
     @JsonManagedReference
     private List<CPTCode> cptCodes;
 
@@ -85,6 +89,43 @@ public class Bill extends DomainObject {
      */
     public Bill () {
 
+    }
+
+    /**
+     * Bill constructor
+     */
+    public Bill ( final User patient, final User hcp, final List<CPTCode> codes ) {
+        setPatient( patient );
+        setHcp( hcp );
+        setCptCodes( codes );
+        int cost = 0;
+        for ( int i = 0; i < codes.size(); i++ ) {
+            cost += codes.get( i ).getCost();
+        }
+        setCost( cost );
+        setStatus( "Unpaid" );
+        setDate( ZonedDateTime.now() );
+    }
+
+    /**
+     * method to pay bill
+     *
+     * @param pay
+     *            amount being paid
+     * @return true if payment occurs
+     */
+    public Boolean pay ( final int pay ) {
+        if ( !status.equals( "Fully Paid" ) && pay <= cost ) {
+            cost -= pay;
+            if ( cost == 0 ) {
+                setStatus( "Fully Paid" );
+            }
+            else {
+                setStatus( "Partially Paid" );
+            }
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
+import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
 import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.repositories.CPTCodeRepository;
 
@@ -16,6 +17,7 @@ import edu.ncsu.csc.iTrust2.repositories.CPTCodeRepository;
  * database.
  *
  * @author Colin Scanlon
+ * @author Jonathan Buck
  *
  */
 @Component
@@ -82,4 +84,19 @@ public class CPTCodeService extends Service<CPTCode, Long> {
 
     }
 
+    /**
+     *
+     * @param form
+     *            form for building persistence object
+     * @return generated CPT Code
+     */
+    public CPTCode build ( final CPTCodeForm form ) {
+        final CPTCode code = new CPTCode();
+        code.setArchive( form.getArchive() );
+        code.setCode( form.getCode() );
+        code.setCost( form.getCost() );
+        code.setDescription( form.getDescription() );
+        code.setId( form.getId() );
+        return code;
+    }
 }
