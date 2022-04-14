@@ -78,9 +78,10 @@ public class CPTCode extends DomainObject {
     /**
      * this function provides functionality for creating archived cpt codes
      *
+     * @param code
+     *            the cpt code object
      * @param delete
      *            true if code is being deleted false if it is just being edited
-     * @return cpt code for archive
      */
     public CPTCode ( final CPTCode code, final Boolean delete ) {
         if ( delete ) {
