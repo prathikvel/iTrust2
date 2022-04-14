@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Vector;
 
 import javax.transaction.Transactional;
 
@@ -31,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import edu.ncsu.csc.iTrust2.common.TestUtils;
 import edu.ncsu.csc.iTrust2.forms.AppointmentRequestForm;
+import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
 import edu.ncsu.csc.iTrust2.forms.OfficeVisitForm;
 import edu.ncsu.csc.iTrust2.forms.UserForm;
 import edu.ncsu.csc.iTrust2.models.BasicHealthMetrics;
@@ -216,6 +218,15 @@ public class APIOfficeVisitTest {
         visit.setNotes( "Test office visit" );
         visit.setType( AppointmentType.GENERAL_CHECKUP.toString() );
         visit.setHospital( "iTrust Test Hospital 2" );
+        final CPTCodeForm cost1 = new CPTCodeForm();
+        cost1.setCode( "99202" );
+        cost1.setDescription( "Bandaid" );
+        cost1.setId( 1L );
+        cost1.setCost( 10 );
+        cost1.setArchive( false );
+        final List<CPTCodeForm> codes = new Vector<CPTCodeForm>();
+        codes.add( cost1 );
+        visit.setCPTCodes( codes );
 
         /* Create the Office Visit */
         mvc.perform( post( "/api/v1/officevisits" ).contentType( MediaType.APPLICATION_JSON )
@@ -233,6 +244,7 @@ public class APIOfficeVisitTest {
         vList = officeVisitService.findByHcpAndPatient( v.getHcp(), v.getPatient() );
         assertEquals( vList.get( 0 ).getHcp(), v.getHcp() );
         assertEquals( vList.get( 0 ).getPatient(), v.getPatient() );
+        assertEquals( 1, v.getCptCodes().size() );
 
         visit.setPatient( "antti" );
         visit.setDiastolic( 83 );
