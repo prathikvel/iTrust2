@@ -22,6 +22,7 @@ import edu.ncsu.csc.iTrust2.forms.UserForm;
 import edu.ncsu.csc.iTrust2.models.Bill;
 import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.models.Patient;
+import edu.ncsu.csc.iTrust2.models.Payment;
 import edu.ncsu.csc.iTrust2.models.Personnel;
 import edu.ncsu.csc.iTrust2.models.enums.Role;
 import edu.ncsu.csc.iTrust2.services.BillService;
@@ -203,5 +204,12 @@ public class BillTest {
         assertTrue( out.pay( 20 ) );
 
         assertEquals( (Integer) 0, out.getCost() );
+
+        final Payment p = new Payment( pat1, 10, "Credit Card" );
+        final Payment p2 = new Payment( pat1, 1, "Credit Card" );
+        final List<Payment> payments = new ArrayList<Payment>();
+        payments.add( p );
+        payments.add( p2 );
+        bill.setPayments( payments );
     }
 }
