@@ -61,7 +61,7 @@ public class APIBillController extends APIController {
         }
 
         // otherwise
-        loggerUtil.log( TransactionType.LIST_BILLS, LoggerUtil.currentUser(), "bill viewed" );
+        loggerUtil.log( TransactionType.VIEW_BILL, LoggerUtil.currentUser(), "bill viewed" );
         return new ResponseEntity( bill, HttpStatus.OK );
     }
 
@@ -112,14 +112,6 @@ public class APIBillController extends APIController {
         return billService.findAll();
     }
 
-    @GetMapping ( BASE_PATH + "/bills/{id}" )
-    public ResponseEntity getBill ( @PathVariable ( "id" ) final Long id ) {
-        final Bill b = billService.findById( id );
-        loggerUtil.log( TransactionType.VIEW_BILL, LoggerUtil.currentUser(), "Retrieved bill with id " + id );
-        return null == b ? new ResponseEntity( errorResponse( "No Bill found for id " + id ), HttpStatus.NOT_FOUND )
-                : new ResponseEntity( b, HttpStatus.OK );
-    }
-
     /**
      * Returns a particular bill
      *
@@ -146,81 +138,4 @@ public class APIBillController extends APIController {
         return new ResponseEntity( bill, HttpStatus.OK );
     }
 
-    /**
-     * Returns a particular bill
-     *
-     * @param username
-     *            the name of the patient
-     * @return the result of the API call
-     */
-    @PutMapping ( BASE_PATH + "/bills/{id}" )
-    @PreAuthorize ( "hasRole('ROLE_BSM')" )
-    public ResponseEntity editBill ( @PathVariable ( "id" ) final Long id, @RequestBody final Bill bill ) {
-
-        // the bill in question
-        final Bill billToChange = billService.findById( id );
-
-        if ( billToChange == null ) {
-            return new ResponseEntity( errorResponse( "Bill doesn't exist" ), HttpStatus.NOT_FOUND );
-        }
-
-        billService.delete( billToChange );
-        billService.save( bill ); // update the database
-
-        // otherwise
-        loggerUtil.log( TransactionType.EDIT_BILLS, LoggerUtil.currentUser(), "bill edited" );
-        return new ResponseEntity( bill, HttpStatus.OK );
-    }
-
-    /**
-     * Returns a particular bill
-     *
-     * @param username
-     *            the name of the patient
-     * @return the result of the API call
-     */
-    @PutMapping ( BASE_PATH + "/bills/{id}" )
-    @PreAuthorize ( "hasRole('ROLE_BSM')" )
-    public ResponseEntity editBill ( @PathVariable ( "id" ) final Long id, @RequestBody final Bill bill ) {
-
-        // the bill in question
-        final Bill billToChange = billService.findById( id );
-
-        if ( billToChange == null ) {
-            return new ResponseEntity( errorResponse( "Bill doesn't exist" ), HttpStatus.NOT_FOUND );
-        }
-
-        billService.delete( billToChange );
-        billService.save( bill ); // update the database
-
-        // otherwise
-        loggerUtil.log( TransactionType.EDIT_BILLS, LoggerUtil.currentUser(), "bill edited" );
-        return new ResponseEntity( bill, HttpStatus.OK );
-    }
-
-    /**
-     * Returns a particular bill
-     *
-     * @param username
-     *            the name of the patient
-     * @return the result of the API call
-     */
-    @PutMapping ( BASE_PATH + "/bills/{id}" )
-    @PreAuthorize ( "hasRole('ROLE_BSM')" )
-    public ResponseEntity editBill ( @PathVariable ( "id" ) final Long id, @RequestBody final Bill bill ) {
-
-        // the bill in question
-        final Bill billToChange = billService.findById( id );
-
-        if ( billToChange == null ) {
-            return new ResponseEntity( errorResponse( "Bill doesn't exist" ), HttpStatus.NOT_FOUND );
-        }
-
-        billService.delete( billToChange );
-        billService.save( bill ); // update the database
-
-        // otherwise
-        loggerUtil.log( TransactionType.EDIT_BILLS, LoggerUtil.currentUser(), "bill edited" );
-        return new ResponseEntity( bill, HttpStatus.OK );
-    }
 }

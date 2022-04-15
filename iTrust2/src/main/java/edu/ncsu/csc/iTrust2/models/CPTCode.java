@@ -28,41 +28,48 @@ public class CPTCode extends DomainObject {
      */
     @Id
     @GeneratedValue ( strategy = GenerationType.AUTO )
-    private Long              id;
+    private Long               id;
 
     /**
      * The code of the CPTCode
      */
-    private String            code;
+    private String             code;
 
     /**
      * The cost of the CPTCode
      */
-    private Integer           cost;
+    private Integer            cost;
 
     /**
      * Description of the diagnosis
      */
-    private String            description;
+    private String             description;
 
     /**
      * Flag for if the code is archived or not
      */
-    private boolean           archive;
+    private boolean            archive;
 
     /**
      * list of visits associated with cpt code
      */
     @ManyToMany ( mappedBy = "cptCodes" )
     @JsonBackReference
-    private List<OfficeVisit> officeVisits;
+    private List<OfficeVisit>  officeVisits;
+
+    /**
+     * list of visits associated with cpt code
+     */
+    @ManyToMany ( mappedBy = "cptCodes" )
+    @JsonBackReference
+    private List<VaccineVisit> vaccineVisits;
 
     /**
      * list of bills associated with cpt codes
      */
     @ManyToMany ( mappedBy = "cptCodes" )
     @JsonBackReference
-    private List<Bill>        bills;
+    private List<Bill>         bills;
 
     /**
      * Empty constructor for Hibernate
@@ -228,6 +235,44 @@ public class CPTCode extends DomainObject {
      */
     public void setArchive ( final boolean archive ) {
         this.archive = archive;
+    }
+
+    /**
+     * getter for vaccine visit
+     *
+     * @return the vaccineVisits
+     */
+    public List<VaccineVisit> getVaccineVisits () {
+        return vaccineVisits;
+    }
+
+    /**
+     * setter for vaccine visit
+     *
+     * @param vaccineVisits
+     *            the vaccineVisits to set
+     */
+    public void setVaccineVisits ( final List<VaccineVisit> vaccineVisits ) {
+        this.vaccineVisits = vaccineVisits;
+    }
+
+    /**
+     * getter for bills
+     *
+     * @return the bills
+     */
+    public List<Bill> getBills () {
+        return bills;
+    }
+
+    /**
+     * setter for bills
+     *
+     * @param bills
+     *            the bills to set
+     */
+    public void setBills ( final List<Bill> bills ) {
+        this.bills = bills;
     }
 
     @Override

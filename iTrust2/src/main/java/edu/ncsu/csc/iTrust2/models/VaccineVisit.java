@@ -2,17 +2,22 @@ package edu.ncsu.csc.iTrust2.models;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.JsonAdapter;
 
 import edu.ncsu.csc.iTrust2.adapters.ZonedDateTimeAdapter;
@@ -85,6 +90,15 @@ public class VaccineVisit extends DomainObject {
     @Convert ( converter = ZonedDateTimeAttributeConverter.class )
     @JsonAdapter ( ZonedDateTimeAdapter.class )
     private ZonedDateTime             followUpDate;
+
+    /**
+     * List of all CPTCodes for an office visit
+     */
+    @ManyToMany ( cascade = CascadeType.MERGE )
+    @JoinTable ( name = "VACVISIT_CODES", joinColumns = { @JoinColumn ( name = "vaccine_id" ) },
+            inverseJoinColumns = { @JoinColumn ( name = "cptcode_id" ) } )
+    @JsonManagedReference
+    private List<CPTCode>             cptCodes;
 
     /**
      * The list of CPTCodes for the Vaccine visit
@@ -256,9 +270,9 @@ public class VaccineVisit extends DomainObject {
      *
      * @return the cPTCodes
      */
-    // public List<CPTCode> getCPTCodes () {
-    // return cptCodes;
-    // }
+    public List<CPTCode> getCPTCodes () {
+        return cptCodes;
+    }
 
     /**
      * Sets the list of CPTCodes for the visit
@@ -266,9 +280,9 @@ public class VaccineVisit extends DomainObject {
      * @param cPTCodes
      *            the cPTCodes to set
      */
-    // public void setCPTCodes ( final List<CPTCode> cptCodes ) {
-    // this.cptCodes = cptCodes;
-    // }
+    public void setCPTCodes ( final List<CPTCode> cptCodes ) {
+        this.cptCodes = cptCodes;
+    }
 
     /**
      * Check to see if the patient is old enough for the vaccine.

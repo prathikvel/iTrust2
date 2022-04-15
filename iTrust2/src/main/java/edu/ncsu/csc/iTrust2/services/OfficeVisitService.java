@@ -196,9 +196,6 @@ public class OfficeVisitService extends Service<OfficeVisit, Long> {
             final List<CPTCode> codes = new ArrayList<CPTCode>();
 
             ov.setCPTCodes( ovf.getCPTCodes().stream().map( cptCodeService::build ).collect( Collectors.toList() ) );
-            // for ( final CPTCode c : ov.getCPTCodes() ) {
-            // c.addVisit( ov );
-            // }
         }
 
         ov.validateDiagnoses();

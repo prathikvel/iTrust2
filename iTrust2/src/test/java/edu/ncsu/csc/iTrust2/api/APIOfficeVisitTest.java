@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -228,9 +229,11 @@ public class APIOfficeVisitTest {
         codes.add( cost1 );
         visit.setCPTCodes( codes );
 
+        System.out.println( codes.get( 0 ).getCode() );
+        assertTrue( codes.get( 0 ).getCode().matches( "^992[0,1][2,3,4,5]$" ) );
         /* Create the Office Visit */
         mvc.perform( post( "/api/v1/officevisits" ).contentType( MediaType.APPLICATION_JSON )
-                .content( TestUtils.asJsonString( visit ) ) ).andExpect( status().isOk() );
+                .content( TestUtils.asJsonString( visit ) ) ).andDo( print() ).andExpect( status().isOk() );
 
         Assert.assertEquals( 1, officeVisitService.count() );
 
@@ -244,7 +247,7 @@ public class APIOfficeVisitTest {
         vList = officeVisitService.findByHcpAndPatient( v.getHcp(), v.getPatient() );
         assertEquals( vList.get( 0 ).getHcp(), v.getHcp() );
         assertEquals( vList.get( 0 ).getPatient(), v.getPatient() );
-        assertEquals( 1, v.getCptCodes().size() );
+        assertEquals( 1, v.getCPTCodes().size() );
 
         visit.setPatient( "antti" );
         visit.setDiastolic( 83 );

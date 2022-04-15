@@ -258,7 +258,7 @@ public class OfficeVisitTest {
 
         final OfficeVisit out = officeVisitService.build( visit );
 
-        assertEquals( "99202", out.getCptCodes().get( 0 ).getCode() );
+        assertEquals( "99202", out.getCPTCodes().get( 0 ).getCode() );
     }
 
     @Test

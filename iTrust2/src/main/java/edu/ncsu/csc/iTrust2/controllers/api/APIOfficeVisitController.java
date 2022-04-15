@@ -124,9 +124,6 @@ public class APIOfficeVisitController extends APIController {
         try {
             visitForm.setHcp( LoggerUtil.currentUser() );
             final OfficeVisit visit = officeVisitService.build( visitForm );
-
-            System.out.println( "HERE HERE HERE" );
-            System.out.println( visitForm );
             if ( null != visit.getId() && officeVisitService.existsById( visit.getId() ) ) {
                 return new ResponseEntity(
                         errorResponse( "Office visit with the id " + visit.getId() + " already exists" ),
@@ -134,8 +131,8 @@ public class APIOfficeVisitController extends APIController {
             }
 
             Boolean reqCode = false;
-            if ( visit.getCptCodes() != null ) {
-                for ( final CPTCode c : visit.getCptCodes() ) {
+            if ( visit.getCPTCodes() != null ) {
+                for ( final CPTCode c : visit.getCPTCodes() ) {
                     if ( c.getCode().matches( "^992[0,1][2,3,4,5]$" ) ) {
                         reqCode = true;
                     }
@@ -146,7 +143,7 @@ public class APIOfficeVisitController extends APIController {
                 return new ResponseEntity( errorResponse( "Enter required CPT Code" ), HttpStatus.BAD_REQUEST );
             }
 
-            final Bill bill = new Bill( visit.getPatient(), visit.getHcp(), visit.getCptCodes() );
+            final Bill bill = new Bill( visit.getPatient(), visit.getHcp(), visit.getCPTCodes() );
             billService.save( bill );
             officeVisitService.save( visit );
 
