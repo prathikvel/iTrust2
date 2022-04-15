@@ -121,4 +121,17 @@ public class PatientController {
         return "/patient/viewBilling/viewBills";
     }
 
+    /**
+     * Create a page for the patient to view bill
+     *
+     * @param model
+     *            data for front end
+     * @return The page for the patient to view bill
+     */
+    @GetMapping ( value = "patient/bills/{id}" )
+    @PreAuthorize ( "hasRole('ROLE_PATIENT')" )
+    public String viewBill ( final Model model ) {
+        return "/patient/viewBilling/viewBill";
+    }
+
 }

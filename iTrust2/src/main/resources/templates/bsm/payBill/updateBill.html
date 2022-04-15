@@ -13,8 +13,8 @@
 				$scope.pathname = window.location.pathname;
 				$scope.billId = $scope.pathname.substring($scope.pathname.lastIndexOf('/') + 1);
 
-				$scope.bill = [];
-				$scope.loadTable = function() {
+				$scope.bill = {};
+				$scope.loadBill = function() {
 					$http.get("/iTrust2/api/v1/bills/" + $scope.billId).then(
 							function(response) {
 								$scope.bill = response.data; // or just response?
@@ -25,9 +25,7 @@
 							});
 				}
 				
-				// load table upon page loading
-				$scope.loadTable();
-				
+				$scope.formBill = {};
 				$scope.payBill = function() {
 					let amount = $scope.formBill.cash + $scope.formBill.check
 									+ $scope.formBill.creditCard + $scope.formBill.insurance;
@@ -37,13 +35,16 @@
 						$scope.bill.status = "Paid";
 					}
 					
-					$http.put("/iTrust2/api/v1/bills/", $scope.bill).then(
+					$http.put("/iTrust2/api/v1/bills/" + $scope.billId, $scope.bill).then(
 							function(response) {
 								window.location.replace("bills");
 							}, function(rejection) {
 								$scope.errorAdding = "Could not edit bill";
 							});
 				}
+				
+				// load table upon page loading
+				$scope.loadBill();
 			});
 			/*]]>*/
 		</script>
