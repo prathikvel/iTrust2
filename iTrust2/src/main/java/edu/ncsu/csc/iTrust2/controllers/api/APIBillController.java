@@ -61,7 +61,7 @@ public class APIBillController extends APIController {
         }
 
         // otherwise
-        loggerUtil.log( TransactionType.LIST_BILLS, LoggerUtil.currentUser(), "bill viewed" );
+        loggerUtil.log( TransactionType.VIEW_BILL, LoggerUtil.currentUser(), "bill viewed" );
         return new ResponseEntity( bill, HttpStatus.OK );
     }
 
@@ -137,4 +137,5 @@ public class APIBillController extends APIController {
         loggerUtil.log( TransactionType.EDIT_BILLS, LoggerUtil.currentUser(), "bill edited" );
         return new ResponseEntity( bill, HttpStatus.OK );
     }
+
 }

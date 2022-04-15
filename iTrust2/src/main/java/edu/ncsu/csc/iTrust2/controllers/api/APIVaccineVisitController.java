@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ncsu.csc.iTrust2.forms.VaccineVisitForm;
+import edu.ncsu.csc.iTrust2.models.Bill;
 import edu.ncsu.csc.iTrust2.models.User;
 import edu.ncsu.csc.iTrust2.models.VaccineVisit;
 import edu.ncsu.csc.iTrust2.models.enums.Role;
 import edu.ncsu.csc.iTrust2.models.enums.TransactionType;
+import edu.ncsu.csc.iTrust2.services.BillService;
 import edu.ncsu.csc.iTrust2.services.UserService;
 import edu.ncsu.csc.iTrust2.services.VaccineVisitService;
 import edu.ncsu.csc.iTrust2.utils.LoggerUtil;
@@ -46,6 +48,10 @@ public class APIVaccineVisitController extends APIController {
     @Autowired
     private UserService<User>   userService;
 
+    /** Bill service */
+    @Autowired
+    private BillService         billService;
+
     /**
      * Parses a VVF and creates a VaccineVisit within the database.
      *
@@ -64,6 +70,8 @@ public class APIVaccineVisitController extends APIController {
                         errorResponse( "VaccineVisit with the id " + request.getId() + " already exists" ),
                         HttpStatus.CONFLICT );
             }
+            final Bill bill = new Bill( request.getPatient(), request.getVaccinator(), request.getCPTCodes() );
+            billService.save( bill );
             service.save( request );
             loggerUtil.log( TransactionType.OFFICE_VISIT_CREATED, request.getPatient(), request.getVaccinator() );
             return new ResponseEntity( request, HttpStatus.OK );

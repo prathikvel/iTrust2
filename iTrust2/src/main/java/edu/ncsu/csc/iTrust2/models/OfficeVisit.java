@@ -234,25 +234,6 @@ public class OfficeVisit extends DomainObject {
     }
 
     /**
-     * getter for cpt codes
-     *
-     * @return cpt codes
-     */
-    public List<CPTCode> getCptCodes () {
-        return cptCodes;
-    }
-
-    /**
-     * setter for cptcodes
-     *
-     * @param cptCodes
-     *            cpt codes
-     */
-    public void setCptCodes ( final List<CPTCode> cptCodes ) {
-        this.cptCodes = cptCodes;
-    }
-
-    /**
      * Get the patient of this office visit
      *
      * @return the patient of this office visit

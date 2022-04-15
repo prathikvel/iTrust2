@@ -2,8 +2,8 @@ package edu.ncsu.csc.iTrust2.forms;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.models.VaccineVisit;
 
 /**
@@ -43,9 +43,9 @@ public class VaccineVisitForm implements Serializable {
     private String            requestId;
 
     /**
-     * The list of CPTCodes for the visit
+     * List of all CPTCodes for an office visit
      */
-    private List<CPTCode>     cptCodes;
+    private List<CPTCodeForm> cptCodes;
 
     /**
      * Hibernate constructor
@@ -67,7 +67,7 @@ public class VaccineVisitForm implements Serializable {
         setDateTime( ov.getDate().toString() );
         setVaccine( ov.getVaccineType().toString() );
         setDose( ov.getDose().toString() );
-        // setCPTCodes( ov.getCPTCodes() );
+        setCPTCodes( ov.getCPTCodes().stream().map( CPTCodeForm::new ).collect( Collectors.toList() ) );
         if ( ov.getCorrespondingRequest() != null ) {
             setRequestId( ov.getCorrespondingRequest().getId() + "" );
         }
@@ -248,7 +248,7 @@ public class VaccineVisitForm implements Serializable {
      *
      * @return the cptCodes
      */
-    public List<CPTCode> getCPTCodes () {
+    public List<CPTCodeForm> getCPTCodes () {
         return cptCodes;
     }
 
@@ -258,7 +258,7 @@ public class VaccineVisitForm implements Serializable {
      * @param cptCodes
      *            the cptCodes to set
      */
-    public void setCPTCodes ( final List<CPTCode> cptCodes ) {
+    public void setCPTCodes ( final List<CPTCodeForm> cptCodes ) {
         this.cptCodes = cptCodes;
     }
 

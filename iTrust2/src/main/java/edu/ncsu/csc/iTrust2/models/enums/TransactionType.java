@@ -400,12 +400,12 @@ public enum TransactionType {
     /**
      * List of all bills in the system by a particular patient
      */
-    LIST_BILLS_BY ( 2108, "Patient bills viewed", false ),
+    LIST_BILLS_BY ( 2108, "Patient bills viewed", true ),
 
     /**
      * A bill was viewed is all
      */
-    LIST_BILLS ( 2109, "Bill was viewed", false ),
+    VIEW_BILL ( 2109, "Bill was viewed", true ),
 
     /**
      * A bill was updated

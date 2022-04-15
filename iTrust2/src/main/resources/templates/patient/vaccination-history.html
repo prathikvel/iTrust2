@@ -76,6 +76,7 @@
 				    console.log($scope.patient);
 				    $scope.getPatientRecords();
 				    $scope.getPatientVisits();
+				    console.log(response.data.visits);
 				}, function(rejection) {
 				    console.err("Could not retrieve expected certificate record");
 				});
@@ -102,6 +103,7 @@
 								vaccineType: $scope.patient.vaccineType.name,
 								dosesCompleted: "" + $scope.patient.doses + " of " + $scope.patient.vaccineType.numDoses,
 								vaccinator: $scope.certificateList[0].vaccinator,
+						
 						};
 					} else {
 						$scope.showRecords = false;
@@ -129,6 +131,7 @@
 							time: $scope.getTime(visit.visit.date),
 							dose: "" + visit.visit.dose + " of " + visit.visit.vaccineType.numDoses,
 							status: "Completed",
+							cptcodes: visit.visit.cptcodes
 						}
 						return visitObj;
 					});
@@ -217,12 +220,14 @@
 														<td>Time</td>
 														<td>Dose</td>
 														<td>Status</td>
+														<td>Codes</td>
 													</tr>
 													<tr ng-repeat="v in vaccinationVisits">
 														<td>{{v.date}}</td>
 														<td>{{v.time}}</td>
 														<td>{{v.dose}}</td>
 														<td>{{v.status}}</td>
+														<td><div ng-repeat="c in v.cptcodes">{{c.code}} </div></td>
 													</tr>
 												</table>
 											</div>
