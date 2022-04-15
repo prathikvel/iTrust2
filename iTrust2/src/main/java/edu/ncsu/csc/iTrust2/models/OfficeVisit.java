@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -135,7 +137,9 @@ public class OfficeVisit extends DomainObject {
     /**
      * List of all CPTCodes for an office visit
      */
-    @OneToMany ( cascade = CascadeType.ALL )
+    @ManyToMany ( cascade = CascadeType.MERGE )
+    @JoinTable ( name = "OVISIT_CODES", joinColumns = { @JoinColumn ( name = "visit_id" ) },
+            inverseJoinColumns = { @JoinColumn ( name = "cptcode_id" ) } )
     @JsonManagedReference
     private List<CPTCode>        cptCodes;
 
@@ -230,6 +234,25 @@ public class OfficeVisit extends DomainObject {
     }
 
     /**
+     * getter for cpt codes
+     *
+     * @return cpt codes
+     */
+    public List<CPTCode> getCptCodes () {
+        return cptCodes;
+    }
+
+    /**
+     * setter for cptcodes
+     *
+     * @param cptCodes
+     *            cpt codes
+     */
+    public void setCptCodes ( final List<CPTCode> cptCodes ) {
+        this.cptCodes = cptCodes;
+    }
+
+    /**
      * Get the patient of this office visit
      *
      * @return the patient of this office visit
@@ -241,11 +264,11 @@ public class OfficeVisit extends DomainObject {
     /**
      * Set the patient of this office visit
      *
-     * @param patient
+     * @param user
      *            the patient to set this office visit to
      */
-    public void setPatient ( final User patient ) {
-        this.patient = patient;
+    public void setPatient ( final User user ) {
+        this.patient = user;
     }
 
     /**
@@ -260,11 +283,11 @@ public class OfficeVisit extends DomainObject {
     /**
      * Set the hcp of this office visit
      *
-     * @param hcp
+     * @param user
      *            the hcp to set this office visit to
      */
-    public void setHcp ( final User hcp ) {
-        this.hcp = hcp;
+    public void setHcp ( final User user ) {
+        this.hcp = user;
     }
 
     /**
