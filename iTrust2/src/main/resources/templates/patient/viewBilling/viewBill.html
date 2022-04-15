@@ -13,8 +13,8 @@
 				$scope.pathname = window.location.pathname;
 				$scope.billId = $scope.pathname.substring($scope.pathname.lastIndexOf('/') + 1);
 
-				$scope.bill = [];
-				$scope.loadTable = function() {
+				$scope.bill = {};
+				$scope.loadBill = function() {
 					$http.get("/iTrust2/api/v1/bills/" + $scope.billId).then(
 							function(response) {
 								$scope.bill = response.data; // or just response?
@@ -26,7 +26,7 @@
 				}
 				
 				// load table upon page loading
-				$scope.loadTable();
+				$scope.loadBill();
 			});
 			/*]]>*/
 		</script>
@@ -36,9 +36,9 @@
 			<h4 style="color: red" ng-model="message"></h4>
 
 			<h1>Bill</h1>
-			<p>Patient: {{bill.patient}}</p>
+			<p>Patient: {{bill.patient.username}}</p>
 			<p>Office Visit Date: {{bill.date}}</p>
-			<p>Attending Health Care Professional: {{bill.hcp}}</p>
+			<p>Attending Health Care Professional: {{bill.hcp.username}}</p>
 			<table class="table">
 				<tr>
 					<th>CPT Code</th>
