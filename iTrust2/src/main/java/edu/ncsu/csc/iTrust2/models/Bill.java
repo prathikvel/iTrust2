@@ -11,10 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.gson.annotations.JsonAdapter;
 
 import edu.ncsu.csc.iTrust2.adapters.ZonedDateTimeAdapter;
@@ -23,8 +25,8 @@ import edu.ncsu.csc.iTrust2.adapters.ZonedDateTimeAttributeConverter;
 /**
  * representation of a Bill in the iTrust2 System
  *
- * @author Jon
- * @author Colin
+ * @author colinscanlon
+ * @author jmbuck4
  *
  */
 @Entity
@@ -66,7 +68,10 @@ public class Bill extends DomainObject {
     /**
      * List of all CPTCodes for a Bill
      */
-    @OneToMany ( cascade = CascadeType.ALL )
+    @ManyToMany ( cascade = CascadeType.MERGE )
+    @JoinTable ( name = "BILL_CODES", joinColumns = { @JoinColumn ( name = "bill_id" ) },
+            inverseJoinColumns = { @JoinColumn ( name = "cptcode_id" ) } )
+    @JsonManagedReference
     private List<CPTCode> cptCodes;
 
     /**
@@ -89,7 +94,7 @@ public class Bill extends DomainObject {
     /**
      * Bill constructor
      */
-    public Bill ( final Patient patient, final Personnel hcp, final List<CPTCode> codes ) {
+    public Bill ( final User patient, final User hcp, final List<CPTCode> codes ) {
         setPatient( patient );
         setHcp( hcp );
         setCptCodes( codes );

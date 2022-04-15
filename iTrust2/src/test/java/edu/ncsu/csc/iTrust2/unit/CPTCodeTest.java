@@ -1,6 +1,7 @@
 package edu.ncsu.csc.iTrust2.unit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -53,6 +54,23 @@ public class CPTCodeTest {
         assertEquals( "Testing", code.getDescription() );
         assertEquals( 1, (int) code.getCost() );
 
+    }
+
+    @Test
+    @Transactional
+    public void testCreateCodeFromForm () {
+        final CPTCodeForm cost1 = new CPTCodeForm();
+        cost1.setCode( "99202" );
+        cost1.setDescription( "Bandaid" );
+        cost1.setId( 1L );
+        cost1.setCost( 10 );
+        cost1.setArchive( false );
+
+        final CPTCode code = new CPTCode( cost1 );
+        assertEquals( "99202", code.getCode() );
+        assertEquals( "Bandaid", code.getDescription() );
+        assertEquals( (Integer) 10, code.getCost() );
+        assertFalse( code.getArchive() );
     }
 
     @Test

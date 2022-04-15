@@ -169,7 +169,6 @@ public class APICPTCodeController extends APIController {
      * @return the result of the API call
      */
     @GetMapping ( BASE_PATH + "/cptcode" )
-    @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public List<CPTCode> getCodes () {
         loggerUtil.log( TransactionType.LIST_ACTIVE_CPT_CODES, LoggerUtil.currentUser(), "List all active CPT codes" );
         return service.findAllActive();

@@ -230,6 +230,9 @@ a {
 							<li><a
 								href="/iTrust2/patient/vaccination-history"
 								id="vaccinationHistory">Vaccination History</a></li>
+							<li><a
+								href="/iTrust2/patient/bills"
+								id="viewBills">Bills</a></li>
 						</ul></li>
 					<li class="dropdown"><a class="dropdown-toggle"
 						data-toggle="dropdown" id="appointments" href="#">Appointments<span
@@ -262,14 +265,17 @@ a {
 							<li><a
 								href="/iTrust2/bsm/cptcode"
 								id="cptCode">Manage CPT Codes</a></li>
+							<li><a
+								href="/iTrust2/bsm/bills"
+								id="payBill">Pay Bill</a></li>
 						</ul></li>
 				</ul>
 				
 				<ul id="extra-dropdown" class="nav navbar-nav">
 					<li><a
-						href="https://github.ncsu.edu/engr-csc326-staff/iTrust2-v8/wiki">About</a></li>
+						href="https://github.ncsu.edu/engr-csc326-spring2022/csc326-TP-203-5/wiki">About</a></li>
 					<li><a
-						href="https://github.ncsu.edu/engr-csc326-staff/iTrust2-v8">View
+						href="https://github.ncsu.edu/engr-csc326-spring2022/csc326-TP-203-5">View
 							Source</a></li>
 				</ul>
 				<div th:if="${#httpServletRequest.remoteUser != null}" style="position: relative; top: 2px">

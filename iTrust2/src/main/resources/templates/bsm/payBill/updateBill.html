@@ -1,0 +1,95 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: head(title=~{::title},links=~{})">
+<title>Patient Bills</title>
+</head>
+<body th:include="layout :: body" th:with="content=~{::content}">
+	<div th:fragment="content">
+
+		<script th:inline="javascript">
+		/* Otherwise Thymeleaf tries to parse Javascript as XML and breaks itself sometimes.  Sigh */
+		/*<![CDATA[*/
+			var app = angular.module("payBillApp", []);
+			app.controller('payBillCtrl', function($scope, $http) {
+				$scope.pathname = window.location.pathname;
+				$scope.billId = $scope.pathname.substring($scope.pathname.lastIndexOf('/') + 1);
+
+				$scope.bill = [];
+				$scope.loadTable = function() {
+					$http.get("/iTrust2/api/v1/bills/" + $scope.billId).then(
+							function(response) {
+								$scope.bill = response.data; // or just response?
+								$scope.message = "";
+							}, function(rejection) {
+								$scope.bill = [];
+								$scope.message = "Could not get bill";
+							});
+				}
+				
+				// load table upon page loading
+				$scope.loadTable();
+				
+				$scope.payBill = function() {
+					let amount = $scope.formBill.cash + $scope.formBill.check
+									+ $scope.formBill.creditCard + $scope.formBill.insurance;
+					$scope.bill.cost = $scope.bill.cost - amount;
+					
+					if ($scope.bill.cost == 0) {
+						$scope.bill.status = "Paid";
+					}
+					
+					$http.put("/iTrust2/api/v1/bills/", $scope.bill).then(
+							function(response) {
+								window.location.replace("bills");
+							}, function(rejection) {
+								$scope.errorAdding = "Could not edit bill";
+							});
+				}
+			});
+			/*]]>*/
+		</script>
+
+		<div ng-app="payBillApp" ng-controller="payBillCtrl">
+			<!-- Info on tables from https://hello-angularjs.appspot.com/removetablerow -->
+			<h4 style="color: red" ng-model="message"></h4>
+
+			<div style="padding: 0px 0px 20px 30px">
+				<h3>Update Bill</h3>
+			</div>
+
+			<form class="form-horizontal" role="form" name="payBillForm">
+				<div class="form-group" style="padding-left: 30px">
+					<label>Cash</label>
+					<input type="number" class="form-control" name="cash"
+						ng-model="formBill.cash" required />
+				</div>
+				<div class="form-group" style="padding-left: 30px">
+					<label>Check</label>
+					<input type="number" class="form-control" name="check"
+						ng-model="formBill.check" required />
+				</div>
+				<div class="form-group" style="padding-left: 30px">
+					<label>Credit Card</label>
+					<input type="number" class="form-control" name="creditCard"
+						ng-model="formBill.creditCard" required />
+				</div>
+				<div class="form-group" style="padding-left: 30px">
+					<label>Insurance</label>
+					<input type="number" class="form-control" name="insurance"
+						ng-model="formBill.insurance" required />
+				</div>
+
+				<div class="form-group" style="padding-left: 30px">
+					<button class="btn btn-primary"
+					name="submit" ng-click="payBill(payBillForm.$valid)">Submit</button>
+					<!-- <input type="submit" value="Add Code" class="btn btn-primary"/>  -->
+				</div>
+			</form>
+
+			<div>
+				<!-- <h4 style="color: red" ng-show="addCodeForm.$valid">Code doesn't meet specifications</h4>  -->
+				<p style="color: red" ng-model="errorAdding" id="errP">{{errorAdding}}</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
