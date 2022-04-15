@@ -63,6 +63,9 @@ public class Payment extends DomainObject {
      */
     public Payment ( final User patient, final Integer amount, final String type ) {
 
+        setPatient( patient );
+        setAmount( amount );
+        setType( type );
     }
 
     /**
