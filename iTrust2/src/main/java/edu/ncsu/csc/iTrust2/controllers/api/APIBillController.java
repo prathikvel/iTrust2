@@ -50,7 +50,6 @@ public class APIBillController extends APIController {
      * @return the result of the API call
      */
     @GetMapping ( BASE_PATH + "/bills/{id}" )
-    @PreAuthorize ( "hasRole('ROLE_BSM')" )
     public ResponseEntity getBillsbyId ( @PathVariable ( "id" ) final Long id ) {
 
         // logging right away
