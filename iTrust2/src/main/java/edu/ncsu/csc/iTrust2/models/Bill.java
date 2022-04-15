@@ -7,6 +7,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -83,6 +85,9 @@ public class Bill extends DomainObject {
      * The status of the bill
      */
     private String        status;
+
+    @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    private List<Payment> payments;
 
     /**
      * Empty constructor for Hibernate
@@ -237,6 +242,21 @@ public class Bill extends DomainObject {
      */
     public void setStatus ( final String status ) {
         this.status = status;
+    }
+
+    /**
+     * @return the payments
+     */
+    public List<Payment> getPayments () {
+        return payments;
+    }
+
+    /**
+     * @param payments
+     *            the payments to set
+     */
+    public void setPayments ( final List<Payment> payments ) {
+        this.payments = payments;
     }
 
 }
