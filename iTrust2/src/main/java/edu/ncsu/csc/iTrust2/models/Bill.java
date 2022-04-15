@@ -7,7 +7,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -86,7 +85,8 @@ public class Bill extends DomainObject {
      */
     private String        status;
 
-    @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    /** The list of Payments */
+    @OneToMany ( cascade = CascadeType.ALL )
     private List<Payment> payments;
 
     /**
