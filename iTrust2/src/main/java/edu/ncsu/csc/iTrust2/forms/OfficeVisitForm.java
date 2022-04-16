@@ -9,7 +9,6 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.models.OfficeVisit;
 import edu.ncsu.csc.iTrust2.models.enums.HouseholdSmokingStatus;
 import edu.ncsu.csc.iTrust2.models.enums.PatientSmokingStatus;
@@ -147,7 +146,7 @@ public class OfficeVisitForm implements Serializable {
     /**
      * List of all CPTCodes for an office visit
      */
-    private List<CPTCode>          cptCodes;
+    private List<CPTCodeForm>      cptCodes;
 
     /**
      * The visit form with ophthalmology details
@@ -169,7 +168,7 @@ public class OfficeVisitForm implements Serializable {
         setPreScheduled( ( (Boolean) ( ov.getAppointment() != null ) ).toString() );
         setDiagnoses( new ArrayList<DiagnosisForm>() );
         setPrescriptions( ov.getPrescriptions().stream().map( PrescriptionForm::new ).collect( Collectors.toList() ) );
-        setCPTCodes( ov.getCPTCodes() );
+        setCPTCodes( ov.getCPTCodes().stream().map( CPTCodeForm::new ).collect( Collectors.toList() ) );
     }
 
     /**
@@ -576,17 +575,17 @@ public class OfficeVisitForm implements Serializable {
      *
      * @return the cPTCodes
      */
-    public List<CPTCode> getCPTCodes () {
+    public List<CPTCodeForm> getCPTCodes () {
         return cptCodes;
     }
 
     /**
      * Sets the CPTCodes of the visit
      *
-     * @param cPTCodes
+     * @param cptCodes
      *            the cPTCodes to set
      */
-    public void setCPTCodes ( final List<CPTCode> cptCodes ) {
+    public void setCPTCodes ( final List<CPTCodeForm> cptCodes ) {
         this.cptCodes = cptCodes;
     }
 

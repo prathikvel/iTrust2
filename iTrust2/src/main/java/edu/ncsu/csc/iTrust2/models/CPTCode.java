@@ -1,12 +1,16 @@
 package edu.ncsu.csc.iTrust2.models;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
 
@@ -24,27 +28,48 @@ public class CPTCode extends DomainObject {
      */
     @Id
     @GeneratedValue ( strategy = GenerationType.AUTO )
-    private Long    id;
+    private Long               id;
 
     /**
      * The code of the CPTCode
      */
-    private String  code;
+    private String             code;
 
     /**
      * The cost of the CPTCode
      */
-    private Integer cost;
+    private Integer            cost;
 
     /**
      * Description of the diagnosis
      */
-    private String  description;
+    private String             description;
 
     /**
      * Flag for if the code is archived or not
      */
-    private boolean archive;
+    private boolean            archive;
+
+    /**
+     * list of visits associated with cpt code
+     */
+    @ManyToMany ( mappedBy = "cptCodes" )
+    @JsonBackReference
+    private List<OfficeVisit>  officeVisits;
+
+    /**
+     * list of visits associated with cpt code
+     */
+    @ManyToMany ( mappedBy = "cptCodes" )
+    @JsonBackReference
+    private List<VaccineVisit> vaccineVisits;
+
+    /**
+     * list of bills associated with cpt codes
+     */
+    @ManyToMany ( mappedBy = "cptCodes" )
+    @JsonBackReference
+    private List<Bill>         bills;
 
     /**
      * Empty constructor for Hibernate
@@ -78,9 +103,10 @@ public class CPTCode extends DomainObject {
     /**
      * this function provides functionality for creating archived cpt codes
      *
+     * @param code
+     *            the cpt code object
      * @param delete
      *            true if code is being deleted false if it is just being edited
-     * @return cpt code for archive
      */
     public CPTCode ( final CPTCode code, final Boolean delete ) {
         if ( delete ) {
@@ -183,6 +209,25 @@ public class CPTCode extends DomainObject {
     }
 
     /**
+     * getter for office visits
+     *
+     * @return officevists
+     */
+    public List<OfficeVisit> getOfficeVisits () {
+        return officeVisits;
+    }
+
+    /**
+     * setter for office visits
+     *
+     * @param officeVisits
+     *            office visits
+     */
+    public void setOfficeVisits ( final List<OfficeVisit> officeVisits ) {
+        this.officeVisits = officeVisits;
+    }
+
+    /**
      * Sets if the CPTCode is an archive or not
      *
      * @param archive
@@ -190,6 +235,44 @@ public class CPTCode extends DomainObject {
      */
     public void setArchive ( final boolean archive ) {
         this.archive = archive;
+    }
+
+    /**
+     * getter for vaccine visit
+     *
+     * @return the vaccineVisits
+     */
+    public List<VaccineVisit> getVaccineVisits () {
+        return vaccineVisits;
+    }
+
+    /**
+     * setter for vaccine visit
+     *
+     * @param vaccineVisits
+     *            the vaccineVisits to set
+     */
+    public void setVaccineVisits ( final List<VaccineVisit> vaccineVisits ) {
+        this.vaccineVisits = vaccineVisits;
+    }
+
+    /**
+     * getter for bills
+     *
+     * @return the bills
+     */
+    public List<Bill> getBills () {
+        return bills;
+    }
+
+    /**
+     * setter for bills
+     *
+     * @param bills
+     *            the bills to set
+     */
+    public void setBills ( final List<Bill> bills ) {
+        this.bills = bills;
     }
 
     @Override

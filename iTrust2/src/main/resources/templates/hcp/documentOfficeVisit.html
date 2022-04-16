@@ -62,20 +62,6 @@
                         return err.join(". ");
                     }
 
-                    var checkValidProcedure = function (p) {
-                        var err = [];
-                        if (!p.loinc) {
-                            err.push("Lab procedure must be associated with a diagnosis code");
-                        }
-                        if (!p.priority) {
-                            err.push("Lab procedure must have an associated priority");
-                        }
-                        if (!p.labtech) {
-                            err.push("Lab procedure must have an associated lab tech");
-                        }
-                        return err.join(". ");
-                    }
-
                     $scope.three = false;
                     $scope.threeAndUp = false;
                     $scope.twelveAndUp = false;
@@ -163,22 +149,10 @@
                             $scope.icdcodes = response.data;
                         });
 
-                    /*Getting a list of laboratory procedures*/
-                    $http.get("/iTrust2/api/v1/personnel/getbyroles/ROLE_LABTECH").then(
+                    /*Getting a list of CPT codes*/
+                    $http.get("/iTrust2/api/v1/cptcode").then(
                         function (response) {
-                            $scope.tech = response.data;
-                            var techLength = $scope.tech.length;
-                            for (i = 0; i < techLength; i++) {
-                                //passing to inner loop taken from https://stackoverflow.com/questions/17244614/passing-variable-to-promise-in-a-loop
-                                (function (i) {
-                                    $http.get("/iTrust2/api/v1/labprocedures/byUser/" + $scope.tech[i].self.username).then(
-                                        function (response) {
-                                            $scope.tech[i].numAssigned = response.data.length;
-                                        }, function (rejection) {
-                                            $scope.tech[i].numAssigned = "UNKNOWN";
-                                        });
-                                })(i);
-                            }
+                            $scope.cptcodes = response.data;
                         });
 
                     /*Getting a list of lionc codes*/
@@ -377,6 +351,10 @@
                             $scope.visit.date = date.toISOString();
                         }
                         
+                        if ($scope.apptcptcodes.length == 0) {
+                            $scope.errorMsg += "Please input at least one CPT code\n";
+                        }
+                        
                         /*Submitting Office Visits by type*/
                         if ($scope.visit.type === 'GENERAL_CHECKUP' ||
                         		$scope.visit.type === 'GENERAL_OPHTHALMOLOGY') {
@@ -401,11 +379,10 @@
                             if ($scope.errorMsg == "") {
                                 $scope.visit.diagnoses = $scope.diagnoses;
                                 $scope.visit.prescriptions = $scope.prescriptions;
+                                $scope.visit.cptcodes = $scope.apptcptcodes;
                                 $scope.visit.prescriptions.forEach(function (p) {
                                     p.patient = $scope.visit.patient;
                                 });
-
-                                $scope.visit.labProcedures = $scope.procedures;
                                 
                                 $http({
                                     method: 'POST',
@@ -448,6 +425,11 @@
                         $scope.noteEntry = "";
                         $scope.codeEntry = "";
                     }
+                    
+                 // Clears local variables for diagnosis form
+                    function resetCPTForm() {
+                        $scope.cptCodeEntry = "";
+                    }
 
                     // Clears local variables for prescription form
                     function resetPrescriptionForm() {
@@ -475,6 +457,12 @@
                             $scope.diagnoses.push(d);
                             resetDiagnosisForm();
                         }
+                    }
+                    
+                    $scope.apptcptcodes = [];
+                    $scope.addCodes = function () {
+                    	$scope.apptcptcodes.push($scope.cptCodeEntry);
+                        resetCPTForm();
                     }
 
                     $scope.fillEyeDiagnosis = function () {
@@ -508,41 +496,25 @@
                         }
                     }
 
-                    /*Adding a procedure to Office visit*/
-                    $scope.addProcedure = function () {
-                        var procCopy = {};
-                        $scope.errorMsg = "";
-                        $scope.procedure.patient = $scope.visit.actualPatient.self;
-                        $scope.procedure.status = "ASSIGNED";
-                        angular.copy($scope.procedure, procCopy);
-                        var err = checkValidProcedure($scope.procedure);
-                        if (err) {
-                            $scope.errorMsg = err;
-                            $scope.message = "";
-                        } else {
-                            $scope.procedures.push(procCopy);
-                            $scope.procedure = {};
-                            $scope.message = "Lab procedure added successfully";
-                        }
-                    }
-
                     //remove local diagnosis from list
                     $scope.removeDiagnosis = function ($index) {
                         $scope.diagnoses.splice($index, 1);
                     }
 
+                    //remove local cptcodes from list
+                    $scope.removeCPTCode = function ($index) {
+                        $scope.apptcptcodes.splice($index, 1);
+                    }
+                    
+                    
                     //remove local prescription from list
                     $scope.removePrescription = function ($index) {
                         $scope.prescriptions.splice($index, 1);
                     }
 
-                    //remove local procedure from list
-                    $scope.removeProcedure = function ($index) {
-                        $scope.procedures.splice($index, 1);
-                    }
-
                     //call initally
                     resetDiagnosisForm();
+                    resetCPTForm();
                     resetPrescriptionForm();
                 });
 			/*]]>*/
@@ -1005,102 +977,59 @@
 									</div>
 								</div>
 
-								<!-- Lab Procedures Panel -->
-								<div ng-show="visit.type == 'GENERAL_CHECKUP'" class="row">
-									<div class="col-md-4">
-										<div class="panel panel-info">
-											<div class="panel-heading">
-												<h4>Lab Procedures</h4>
-											</div>
-											<div class="panel-body">
-												<div class="form-group row">
-													<div class="col-xs-6">
-														<label>Procedure Code:</label>
-													</div>
-													<div class="col-xs-6">
-														<ul>
-															<li ng-repeat="l in loinccodes"><label> <input
-																	type="radio" ng-model="procedure.loinc"
-																	name="{{l.commonName}}" ng-value="l" value="{{l.code}}"
-																	required="true" /> {{l.commonName}}
+
+                                <!-- CPTCode Panel  -->
+								<div ng-show="visit.type == 'GENERAL_CHECKUP' || visit.type == 'GENERAL_OPHTHALMOLOGY'" class="col-md-4">
+									<div class="panel panel-info">
+										<div class="panel-heading">
+											<h4>CPT Codes</h4>
+										</div>
+										<div class="panel-body">
+											<div class="form-group row">
+												<div class="col-xs-6">
+													<label>Codes:</label>
+												</div>
+												<div class="col-xs-6 radio-box">
+													<div class="form-check">
+														<ul style="list-style: none;">
+															<li ng-repeat="i in cptcodes"><label> <input
+																	type="radio" ng-model="$parent.cptCodeEntry"
+																	id="{{i.code}}" name="{{i.description}}" ng-value="i"
+																	required="true" /> {{i.code}} - {{i.description}}
 															</label></li>
 														</ul>
 													</div>
 												</div>
-												<div class="form-group row">
-													<div class="col-xs-6">
-														<label>Priority:</label>
-													</div>
-													<div class="col-xs-6">
-														<select name="priority" ng-model="procedure.priority"
-															required="true">
-															<option value="CRITICAL">Critical</option>
-															<option value="HIGH">High</option>
-															<option value="MEDIUM">Medium</option>
-															<option value="LOW">Low</option>
-														</select>
-													</div>
+											</div>
+											<div class="form-group row text-center">
+												<div class="col-md-12">
+													<button class="btn btn-success" ng-click="addCodes()"
+														name="addCPTCode">Add CPT Code</button>
 												</div>
-												<!-- List of Lab Techs -->
+											</div>
 												<div class="form-group row">
-													<div class="col-xs-6">
-														<label>Lab Techs:</label>
-													</div>
-													<div class="col-xs-6 radio-box">
-														<div class="form-check">
-															<ul style="list-style: none;">
-																<li ng-repeat="t in tech"><label> <input
-																		type="radio" ng-model="procedure.labtech"
-																		name="{{t.self.username}}" ng-value="t.self"
-																		value="{{t.self.username}}" required="true"
-																		id="radio-{{t.self.username}}" /> {{t.self.username}}
-																		({{t.numAssigned}} assigned)
-																</label></li>
-															</ul>
-														</div>
-													</div>
-												</div>
-												<!-- Comments for lab procedure -->
-												<div class="form-group row">
-													<div class="col-xs-6">
-														<label>Notes:</label>
-														<textarea name="procNotes" ng-model="procedure.comments"
-															class="form-control" rows="3"></textarea>
-
-													</div>
-												</div>
-												<!-- Add procedure button -->
-												<div class="form-group row text-center">
-													<button class="btn btn-success" ng-click="addProcedure()"
-														name="addProcedure">Add Procedure</button>
-												</div>
-
-												<!-- Currently added procedures -->
-												<div class="form-group row">
-													<div class="col-md-12">
-														<div class="panel panel-default">
-															<div class="panel-heading">Added Procedures</div>
-															<div class="panel-body">
-																<div class="row" ng-repeat="p in procedures">
-																	<div>
-																		<b>Code:</b> {{p.loinc.code}} <br> 
-																		<b>Common Name:</b> {{p.loinc.commonName}} <br>
-																		<b>Priority:</b> {{p.priority}} <br>
-																		<b>Status:</b> {{p.status}} <br>
-																		<b>Comments:</b> {{p.comments}} <br>
-																	</div>
-																	<br>
+												<div class="col-md-12">
+													<div class="panel panel-default">
+														<div class="panel-heading">Added Codes</div>
+														<div class="panel-body">
+															<div class="row" ng-repeat="c in apptcptcodes">
+																<div class="col-md-4">{{c.code}}</div>
+																<div class="col-md-4">
+																	<button class="btn btn-danger btn-xs"
+																		ng-click="removeCPTCode($index)"
+																		name="removeCode">
+																		<b>x</b>
+																	</button>
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-
 											</div>
 										</div>
 									</div>
-
 								</div>
+								
 								<!-- Notes and Error Messages -->
 								<div class="row">
 									<div class="form-group col-md-6">

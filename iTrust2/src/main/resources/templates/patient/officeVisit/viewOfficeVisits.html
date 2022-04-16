@@ -51,6 +51,7 @@
         $scope.visit = null;
         $scope.selectVisit = function (visit) {
         	
+        	console.log(visit);
             // Stop displaying previous panels
             $scope.display = false;
             $scope.displaySurvey = false;
@@ -465,6 +466,26 @@
 		
 		
 									<!-- Prescription Panel -->
+									<div ng-show="visit.type == 'GENERAL_CHECKUP' " class="col-md-4">
+										<div class="panel panel-info">
+											<div class="panel-heading">
+												<h4>Prescriptions</h4>
+											</div>
+											<div class="panel-body">
+												<div class="form-group row" ng-repeat="p in visit.prescriptions">
+													<div class="col-xs-12 radio-box">
+														<div class="form-check">
+															<ul>
+																<li>{{p.drug.name}}</li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<!--  
 									<div ng-show="visit.type == 'GENERAL_CHECKUP'" class="col-md-4">
 										<div class="panel panel-info">
 											<div class="panel-heading">
@@ -541,7 +562,7 @@
 																	<div class="col-md-2">{{p.dosage}}mg</div>
 																	<br>
 																	<div class="col-md-1"></div>
-																	<!-- "tab" over columns -->
+																	<!-- "tab" over columns 
 																	<div class="col-md-3">{{p.startDate | date :
 																		'MM/dd/yyyy'}}</div>
 																	<div class="col-md-3">{{p.endDate | date :
@@ -562,96 +583,21 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> -->
 								
-								<!-- Lab Procedures Panel -->
-								<div ng-if="display" ng-show="visit.type == 'GENERAL_CHECKUP'" class="row">
-									<div class="col-md-4">
-										<div class="panel panel-info">
-											<div class="panel-heading">
-												<h4>Lab Procedures</h4>
-											</div>
-											<div class="panel-body">
-												<div class="form-group row">
-													<div class="col-xs-6">
-														<label>Procedure Code:</label>
-													</div>
-													<div class="col-xs-6">
+								<!-- CPT Code Panel  -->
+								<div ng-show="visit.type == 'GENERAL_CHECKUP' || visit.type == 'GENERAL_OPHTHALMOLOGY'" class="col-md-4">
+									<div class="panel panel-info">
+										<div class="panel-heading">
+											<h4>CPT Codes</h4>
+										</div>
+										<div class="panel-body">
+											<div class="form-group row" ng-repeat="code in visit.cptcodes">
+												<div class="col-xs-12 radio-box">
+													<div class="form-check">
 														<ul>
-															<li ng-repeat="l in loinccodes"><label> <input
-																	type="radio" ng-model="procedure.loinc"
-																	name="{{l.commonName}}" ng-value="l" value="{{l.code}}"
-																	required="true" /> {{l.commonName}}
-															</label></li>
+															<li>{{code.code}} - {{code.description}} - {{code.cost}}</li>
 														</ul>
-													</div>
-												</div>
-												<div class="form-group row">
-													<div class="col-xs-6">
-														<label>Priority:</label>
-													</div>
-													<div class="col-xs-6">
-														<select name="priority" ng-model="procedure.priority"
-															required="true">
-															<option value="CRITICAL">Critical</option>
-															<option value="HIGH">High</option>
-															<option value="MEDIUM">Medium</option>
-															<option value="LOW">Low</option>
-														</select>
-													</div>
-												</div>
-												<!-- List of Lab Techs -->
-												<div class="form-group row">
-													<div class="col-xs-6">
-														<label>Lab Techs:</label>
-													</div>
-													<div class="col-xs-6 radio-box">
-														<div class="form-check">
-															<ul style="list-style: none;">
-																<li ng-repeat="t in tech"><label> <input
-																		type="radio" ng-model="procedure.labtech"
-																		name="{{t.self.username}}" ng-value="t.self"
-																		value="{{t.self.username}}" required="true"
-																		id="radio-{{t.self.username}}" /> {{t.self.username}}
-																		({{t.numAssigned}} assigned)
-																</label></li>
-															</ul>
-														</div>
-													</div>
-												</div>
-												<!-- Comments for lab procedure -->
-												<div class="form-group row">
-													<div class="col-xs-6">
-														<label>Notes:</label>
-														<textarea name="procNotes" ng-model="procedure.comments"
-															class="form-control" rows="3"></textarea>
-		
-													</div>
-												</div>
-												<!-- Add procedure button -->
-												<div class="form-group row text-center">
-													<button class="btn btn-success" ng-click="addProcedure()"
-														name="addProcedure">Add Procedure</button>
-												</div>
-		
-												<!-- Currently added procedures -->
-												<div class="form-group row">
-													<div class="col-md-12">
-														<div class="panel panel-default">
-															<div class="panel-heading">Added Procedures</div>
-															<div class="panel-body">
-																<div class="row" ng-repeat="p in procedures">
-																	<div>
-																		<b>Code:</b> {{p.loinc.code}} <br> 
-																		<b>Common Name:</b> {{p.loinc.commonName}} <br>
-																		<b>Priority:</b> {{p.priority}} <br>
-																		<b>Status:</b> {{p.status}} <br>
-																		<b>Comments:</b> {{p.comments}} <br>
-																	</div>
-																	<br>
-																</div>
-															</div>
-														</div>
 													</div>
 												</div>
 											</div>

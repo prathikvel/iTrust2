@@ -1,7 +1,9 @@
 package edu.ncsu.csc.iTrust2.services;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -10,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
 import edu.ncsu.csc.iTrust2.forms.VaccineVisitForm;
+import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.models.Patient;
 import edu.ncsu.csc.iTrust2.models.User;
 import edu.ncsu.csc.iTrust2.models.VaccineAppointmentRequest;
@@ -44,6 +47,10 @@ public class VaccineVisitService extends Service<VaccineVisit, Long> {
     /** Repository to check Vaccine Types */
     @Autowired
     private VaccineTypeService               vaccineService;
+
+    /** service for cpt codes */
+    @Autowired
+    private CPTCodeService                   cptCodeService;
 
     @Override
     protected JpaRepository<VaccineVisit, Long> getRepository () {
@@ -105,9 +112,6 @@ public class VaccineVisitService extends Service<VaccineVisit, Long> {
         }
 
         final ZonedDateTime requestDate = ZonedDateTime.parse( varf.getDateTime() );
-        if ( requestDate.isBefore( ZonedDateTime.now() ) ) {
-            throw new IllegalArgumentException( "Cannot request an appointment before the current time" );
-        }
         request.setDate( requestDate );
 
         request.setDose( Integer.parseInt( varf.getDose() ) );
@@ -126,6 +130,13 @@ public class VaccineVisitService extends Service<VaccineVisit, Long> {
             if ( !varf.getFollowUpDate().equals( "" ) ) {
                 request.setFollowUpDate( ZonedDateTime.parse( varf.getFollowUpDate() ) );
             }
+        }
+
+        if ( varf.getCPTCodes() != null ) {
+            final List<CPTCode> codes = new ArrayList<CPTCode>();
+
+            request.setCPTCodes(
+                    varf.getCPTCodes().stream().map( cptCodeService::build ).collect( Collectors.toList() ) );
         }
 
         return request;

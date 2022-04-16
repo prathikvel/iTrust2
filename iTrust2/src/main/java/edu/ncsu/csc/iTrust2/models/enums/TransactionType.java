@@ -390,7 +390,27 @@ public enum TransactionType {
     /**
      * List of archived CPT codes viewed
      */
-    LIST_ARCHIVED_CPT_CODES ( 2106, "Archived CPT codes viewed", false );
+    LIST_ARCHIVED_CPT_CODES ( 2106, "Archived CPT codes viewed", false ),
+
+    /**
+     * List of all bills in the system
+     */
+    LIST_ALL_BILLS ( 2107, "All bills viewed", false ),
+
+    /**
+     * List of all bills in the system by a particular patient
+     */
+    LIST_BILLS_BY ( 2108, "Patient bills viewed", true ),
+
+    /**
+     * A bill was viewed is all
+     */
+    VIEW_BILL ( 2109, "Bill was viewed", true ),
+
+    /**
+     * A bill was updated
+     */
+    EDIT_BILLS ( 2110, "Bill was udpated", false );
 
     /**
      * Creates a TransactionType for logging events

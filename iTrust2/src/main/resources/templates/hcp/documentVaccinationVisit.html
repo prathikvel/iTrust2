@@ -145,6 +145,12 @@
                             $scope.patients = response.data;
                         });
                     
+                    /*Getting a list of CPT codes*/
+                    $http.get("/iTrust2/api/v1/cptcode").then(
+                        function (response) {
+                            $scope.cptcodes = response.data;
+                        });
+                    
                     /*Getting a list of vaccines*/
                     $http.get("/iTrust2/api/v1/vaccines").then(
                         function (response) {
@@ -341,6 +347,7 @@
                         $scope.errorMsg = "";
                         $scope.message = "";
 
+
                         // Validate date and time
                         var date = new Date($scope.visit.date);
                         if (!dateTimeService.isValidDate($scope.visit.date)) {
@@ -360,6 +367,10 @@
                             $scope.errorMsg += "Please input a valid date and time\n";
                         } else {
                             $scope.formattedVisitDate = date.toISOString();
+                        }
+                        
+                        if ($scope.apptcptcodes.length == 0) {
+                            $scope.errorMsg += "Please input at least one CPT code\n";
                         }
                         
                         if ($scope.visit.followUpDate !== null && $scope.visit.followUpTime !== null) {
@@ -402,6 +413,7 @@
                             		followUpDate: $scope.formattedFollowUpDate || "",
                             		requestId:  $scope.visit.vaccineRequest.id || "",
                             		comments: $scope.visit.comments || "",
+                            		cptcodes: $scope.apptcptcodes
                             }
                         	                        	
                         	console.log(visitObject);
@@ -461,6 +473,22 @@
                     } //end submit function
                     
                     
+                 // Clears local variables for diagnosis form
+                    function resetCPTForm() {
+                        $scope.cptCodeEntry = "";
+                    }
+                    //fill cpt codes
+                    $scope.apptcptcodes = [];
+                    $scope.addCodes = function () {
+                    	$scope.apptcptcodes.push($scope.cptCodeEntry);
+                        resetCPTForm();
+                    }
+                    
+                  //remove local cptcodes from list
+                    $scope.removeCPTCode = function ($index) {
+                        $scope.apptcptcodes.splice($index, 1);
+                    }
+                    
                 	/* Initialize on page first load */
                     $scope.init = () => {
                     	// The selected vaccine type (eg. Moderna, Pfizer) - the entire object
@@ -499,6 +527,7 @@
 						$scope.apptRequestVaccineTypeMessage = ""
 						$scope.apptRequestVaccineTypeMatch = true;
 						$scope.disableSubmit = false;
+						resetCPTForm();
                     }
                     
                     // Call initialization
@@ -627,6 +656,59 @@
 													<div class="alert alert-warning" ng-show="!doseMatch" name="doseAlert" style="margin-top: 10px">{{doseMessage}}</div>
 													<div class="alert alert-success" ng-show="doseMatch && doseMessage.length > 0" name="doseAlert" style="margin-top: 10px">{{doseMessage}}</div>
 												</div>
+												<!-- CPTCode Panel  -->
+												<div class="row">
+													<div class="col-md-4">
+											 			<div class="panel panel-info">
+															<div class="panel-heading">
+																<h4>CPT Codes</h4>
+															</div>
+															<div class="panel-body">
+																<div class="form-group row">
+																	<div class="col-xs-6">
+																		<label>Codes:</label>
+																	</div>
+																	<div class="col-xs-6 radio-box">
+																		<div class="form-check">
+																			<ul style="list-style: none;">
+																				<li ng-repeat="i in cptcodes"><label> <input
+																						type="radio" ng-model="$parent.cptCodeEntry"
+																						id="{{i.code}}" name="{{i.description}}" ng-value="i"
+																						required="true" /> {{i.code}} - {{i.description}}
+																				</label></li>
+																			</ul>
+																		</div>
+																	</div>
+																</div>
+																<div class="form-group row text-center">
+																	<div class="col-md-12">
+																		<button class="btn btn-success" ng-click="addCodes()"
+																			name="addCPTCode">Add CPT Code</button>
+																	</div>
+																</div>
+																	<div class="form-group row">
+																	<div class="col-md-12">
+																		<div class="panel panel-default">
+																			<div class="panel-heading">Added Codes</div>
+																			<div class="panel-body">
+																				<div class="row" ng-repeat="c in apptcptcodes">
+																					<div class="col-md-4">{{c.code}}</div>
+																					<div class="col-md-4">
+																						<button class="btn btn-danger btn-xs"
+																							ng-click="removeCPTCode($index)"
+																							name="removeCode">
+																							<b>x</b>
+																						</button>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
 											</div>
 											<div class="row">
 												<div class="col-sm-10">
@@ -655,157 +737,6 @@
 								</div>
 							</div>
 						
-						
-						
-					<!-- <div class="col-md-12">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h3>Vaccination Visit</h3>
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<div class="form-group col-md-2">
-										<label for="date">Date:</label> <input id="date" type="date"
-											class="form-control" ng-model="visit.date" name="date"
-											ng-change="patientSelect(null);" required="true" />
-									</div>
-
-									<div class="form-group col-md-2">
-										<label for="time">Time:</label> <input id="time" type="time"
-											name="time" class="form-control" ng-model="visit.time"
-											required="true" />
-									</div>
-
-									<div class="form-group col-md-2 text-right">
-										<div class="checkbox">
-											<label> <input type="checkbox" name="preScheduled" ng-change="getVaccineAppointments()"
-												class="checkbox" ng-model="visit.preScheduled">Prescheduled?
-											</label>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="form-group col-md-4">
-										<label>Patient:</label>
-
-										<div class="panel panel-default">
-											<div class="panel-body">
-												<div class="form-check">
-													<ul
-														style="max-height: 15%; overflow: auto; list-style: none;">
-														<li ng-repeat="patient in patients | filter:searchFilter">
-															<label> <input type="radio"
-																ng-model="visit.patient" name="name"
-																value="{{patient}}" required="true"
-																ng-change='patientSelect(patient)'
-																id="{{patient.username}}" />&nbsp;{{patient.username}}
-														</label>
-														</li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="form-group col-md-4" ng-show="visit.preScheduled">
-										<label>Vaccine Requests:</label>
-										<div class="panel panel-default">
-											<div class="panel-body">
-												<div class="form-check">
-													<ul
-														style="max-height: 15%; overflow: auto; list-style: none;">
-														<li ng-repeat="appointment in appointments"><label>
-																<input type="radio" ng-model="vaccRequest"
-																ng-change="handleVaccineRequest(appointment)"
-																name="appointment" value="{{appointment}}"
-																required="true" /> {{appointment.type | humanize}}
-														</label></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="form-group col-md-4">
-										<label>Vaccine Type:</label>
-										<div class="panel panel-default">
-											<div class="panel-body">
-												<div class="form-check">
-													<ul
-														style="max-height: 15%; overflow: auto; list-style: none;">
-														<li ng-repeat="v in vaccines"><label>
-																<input type="radio" ng-model="chosenVaccineType"
-																name="vaccine" value="{{v}}"
-																ng-change="vaccineHandler(v)"
-																required="true" /> {{v.vaccine.name}}
-														</label></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-									<div class="form-group col-md-6">
-										<label>Number of Doses Completed:</label>
-										<div class="panel panel-default">
-											<div class="panel-body">
-												<div class="form-check">
-													<ul
-														style="max-height: 15%; overflow: auto; list-style: none;">
-														<li ng-repeat="dose in doseMap"><label>
-																<input type="radio" ng-model="visit.dose"
-																name="dose" value="{{dose}}"
-																ng-change="doseHandler(dose)"
-																required="true" /> {{dose}}
-														</label></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-								<div class="row">
-
-	
-								</div>
-								Notes and Error Messages
-								<div class="row">
-									<div class="form-group col-md-6">
-										<label>Comments:</label>
-										<textarea name="notes" ng-model="visit.comments"
-											class="form-control" rows="3"></textarea>
-									</div>
-									
-									<div class="row" ng-show="showScheduleFollowUp">
-											<h4>Schedule Follow Up Visit</h4>
-											<div class="form-group col-md-2">
-												<label for="date">Date:</label> <input id="date" type="date"
-													class="form-control" ng-change="followUpDateHandler()" ng-model="visit.followUpDate" name="followUpDate"
-													required="true" />
-											</div>
-		
-											<div class="form-group col-md-2">
-												<label for="time">Time:</label> <input id="time" type="time"
-													name="followUpTime"  ng-change="followUpDateHandler()" class="form-control" ng-model="visit.followUpTime"
-													required="true" />
-											</div>
-									</div>
-									
-									<div class="col-md-12 text-right">
-										<div style="white-space: pre-line;">
-											<div name="success" class="text-success">{{message}}</div>
-											<div name="errorMsg" class="text-danger">{{errorMsg}}</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							was form
-							<div class="panel-footer text-right">
-								button may have to be inside form tag, or just a submit function for the form?
-								<button class="btn btn-primary btn-lg" ng-click="submit()"
-									name="submit">Submit Vaccination Visit</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
 	</div>
 </body>
 

@@ -75,7 +75,7 @@ public class APICPTCodeTest {
         CPTCodeForm code = TestUtils.gson().fromJson( content, CPTCodeForm.class );
         form.setId( code.getId() ); // fill in the id of the code we just
                                     // created
-        assertEquals( form, code );
+        assertEquals( form.getCode(), code.getCode() );
 
         content = mvc.perform( get( "/api/v1/cptcode/" + form.getCode() ).contentType( MediaType.APPLICATION_JSON ) )
                 .andReturn().getResponse().getContentAsString();

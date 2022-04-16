@@ -55,4 +55,30 @@ public class BSMController {
     public String view ( final Model model ) {
         return "/bsm/viewArchivedCPTCodes";
     }
+
+    /**
+     * View Bills
+     *
+     * @param model
+     *            data for front end
+     * @return mapping
+     */
+    @RequestMapping ( value = "bsm/bills" )
+    @PreAuthorize ( "hasRole('ROLE_BSM')" )
+    public String viewBills ( final Model model ) {
+        return "/bsm/payBill/payBill";
+    }
+
+    /**
+     * Pay Bills
+     *
+     * @param model
+     *            data for front end
+     * @return mapping
+     */
+    @RequestMapping ( value = "bsm/bills/{id}" )
+    @PreAuthorize ( "hasRole('ROLE_BSM')" )
+    public String payBills ( final Model model ) {
+        return "/bsm/payBill/updateBill";
+    }
 }

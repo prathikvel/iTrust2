@@ -23,6 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import edu.ncsu.csc.iTrust2.TestConfig;
+import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
+import edu.ncsu.csc.iTrust2.forms.OfficeVisitForm;
 import edu.ncsu.csc.iTrust2.forms.OphthalmologyVisitForm;
 import edu.ncsu.csc.iTrust2.forms.UserForm;
 import edu.ncsu.csc.iTrust2.models.BasicHealthMetrics;
@@ -41,6 +43,7 @@ import edu.ncsu.csc.iTrust2.models.enums.AppointmentType;
 import edu.ncsu.csc.iTrust2.models.enums.HouseholdSmokingStatus;
 import edu.ncsu.csc.iTrust2.models.enums.Role;
 import edu.ncsu.csc.iTrust2.services.BasicHealthMetricsService;
+import edu.ncsu.csc.iTrust2.services.CPTCodeService;
 import edu.ncsu.csc.iTrust2.services.DrugService;
 import edu.ncsu.csc.iTrust2.services.HospitalService;
 import edu.ncsu.csc.iTrust2.services.ICDCodeService;
@@ -73,6 +76,9 @@ public class OfficeVisitTest {
 
     @Autowired
     private PrescriptionService       prescriptionService;
+
+    @Autowired
+    private CPTCodeService            cptCodeService;
 
     @Before
     public void setup () {
@@ -208,6 +214,7 @@ public class OfficeVisitTest {
         code2.setCost( 1 );
         cptCodes.add( code2 );
         visit.setCPTCodes( cptCodes );
+        cptCodeService.save( code2 );
 
         officeVisitService.save( visit );
 
@@ -220,15 +227,38 @@ public class OfficeVisitTest {
         code3.setDescription( "Test Again" );
         code3.setCost( 2 );
         cptCodes.add( code3 );
-
-        cptCodes.add( code3 );
         visit.setCPTCodes( cptCodes );
-        /*
-         * officeVisitService.save( visit ); retrieved =
-         * officeVisitService.findAll().get( 0 ); Assert.assertEquals( 2,
-         * retrieved.getCPTCodes().size() );
-         */
+        cptCodeService.save( code3 );
 
+        officeVisitService.save( visit );
+        retrieved = officeVisitService.findAll().get( 0 );
+        Assert.assertEquals( 2, retrieved.getCPTCodes().size() );
+
+    }
+
+    @Test
+    @Transactional
+    public void testCreateFromForm () {
+        final OfficeVisitForm visit = new OfficeVisitForm();
+        visit.setDate( "2030-11-19T04:50:00.000-05:00" );
+        visit.setHcp( "hcp" );
+        visit.setPatient( "patient" );
+        visit.setNotes( "Test office visit" );
+        visit.setType( AppointmentType.GENERAL_CHECKUP.toString() );
+        visit.setHospital( "iTrust Test Hospital 2" );
+        final CPTCodeForm cost1 = new CPTCodeForm();
+        cost1.setCode( "99202" );
+        cost1.setDescription( "Bandaid" );
+        cost1.setId( 1L );
+        cost1.setCost( 10 );
+        cost1.setArchive( false );
+        final List<CPTCodeForm> codes = new Vector<CPTCodeForm>();
+        codes.add( cost1 );
+        visit.setCPTCodes( codes );
+
+        final OfficeVisit out = officeVisitService.build( visit );
+
+        assertEquals( "99202", out.getCPTCodes().get( 0 ).getCode() );
     }
 
     @Test
