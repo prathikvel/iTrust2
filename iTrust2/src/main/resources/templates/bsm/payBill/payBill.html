@@ -73,10 +73,14 @@
 			<h4 style="color: red" ng-model="message"></h4>
 
 			<h1>Bill List</h1>
-			<p style="display: inline-block"><strong>Select Patient:</strong></p>
-			<select ng-model="selectedPatient" ng-options="b.patient.username for b in bills | unique: 'patient'">
-				<option value="">All</option>
-			</select>
+			<div class="form-inline">
+				<label><strong>Select Patient:</strong></label>
+				<select class="form-control" ng-model="selectedPatient"
+					ng-options="b.patient.username for b in bills | unique: 'patient'">
+					<option value="">All</option>
+				</select>
+			</div>
+			
 			<table class="table">
 				<tr>
 					<th>Bill Number</th>
