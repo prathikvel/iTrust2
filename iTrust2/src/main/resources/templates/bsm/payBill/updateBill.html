@@ -31,6 +31,9 @@
 					$http.put("/iTrust2/api/v1/bills/pay/" + $scope.billId, $scope.payment).then(
 							function(response) {
 								$scope.loadBill();
+								$scope.successMessage = "Successfully updated bill";
+								$scope.payment.type = null;
+								$scope.payment.amount = null;
 							}, function(rejection) {
 								$scope.errorAdding = "Could not edit bill";
 							});
@@ -106,6 +109,7 @@
 			
 						<div>
 							<!-- <h4 style="color: red" ng-show="addCodeForm.$valid">Code doesn't meet specifications</h4>  -->
+							<p style="color: green" ng-model="successMessage" id="successP">{{successMessage}}</p>
 							<p style="color: red" ng-model="errorAdding" id="errP">{{errorAdding}}</p>
 						</div>
 					</td>
