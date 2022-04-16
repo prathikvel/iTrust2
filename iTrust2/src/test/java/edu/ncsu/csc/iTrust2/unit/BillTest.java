@@ -106,7 +106,8 @@ public class BillTest {
         assertEquals( 3, out.getCptCodes().size() );
         assertEquals( (Integer) 35, out.getCost() );
 
-        assertTrue( out.pay( 35 ) );
+        final Payment pay = new Payment( pat1, 35, "Credit card" );
+        assertTrue( out.pay( pay ) );
 
         assertEquals( (Integer) 0, out.getCost() );
     }
@@ -151,7 +152,8 @@ public class BillTest {
         assertEquals( (Integer) 35, out.getCost() );
         assertEquals( codes, out.getCptCodes() );
 
-        assertTrue( out.pay( 35 ) );
+        final Payment pay = new Payment( pat1, 35, "Credit card" );
+        assertTrue( out.pay( pay ) );
 
         assertEquals( (Integer) 0, out.getCost() );
     }
@@ -195,13 +197,16 @@ public class BillTest {
         assertEquals( (Integer) 35, out.getCost() );
         assertEquals( codes, out.getCptCodes() );
 
-        assertTrue( out.pay( 15 ) );
+        final Payment pay = new Payment( pat1, 15, "Credit card" );
+        assertTrue( out.pay( pay ) );
 
         assertEquals( (Integer) 20, out.getCost() );
 
-        assertFalse( out.pay( 21 ) );
+        final Payment pay2 = new Payment( pat1, 21, "Credit card" );
+        assertFalse( out.pay( pay2 ) );
 
-        assertTrue( out.pay( 20 ) );
+        final Payment pay3 = new Payment( pat1, 20, "Credit card" );
+        assertTrue( out.pay( pay3 ) );
 
         assertEquals( (Integer) 0, out.getCost() );
 

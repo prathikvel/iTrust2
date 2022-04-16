@@ -37,6 +37,7 @@ import edu.ncsu.csc.iTrust2.forms.CPTCodeForm;
 import edu.ncsu.csc.iTrust2.forms.OfficeVisitForm;
 import edu.ncsu.csc.iTrust2.forms.UserForm;
 import edu.ncsu.csc.iTrust2.models.BasicHealthMetrics;
+import edu.ncsu.csc.iTrust2.models.CPTCode;
 import edu.ncsu.csc.iTrust2.models.Hospital;
 import edu.ncsu.csc.iTrust2.models.OfficeVisit;
 import edu.ncsu.csc.iTrust2.models.Patient;
@@ -53,6 +54,7 @@ import edu.ncsu.csc.iTrust2.models.enums.State;
 import edu.ncsu.csc.iTrust2.models.enums.Status;
 import edu.ncsu.csc.iTrust2.services.AppointmentRequestService;
 import edu.ncsu.csc.iTrust2.services.BasicHealthMetricsService;
+import edu.ncsu.csc.iTrust2.services.CPTCodeService;
 import edu.ncsu.csc.iTrust2.services.HospitalService;
 import edu.ncsu.csc.iTrust2.services.OfficeVisitService;
 import edu.ncsu.csc.iTrust2.services.UserService;
@@ -84,6 +86,8 @@ public class APIOfficeVisitTest {
 
     @Autowired
     private HospitalService           hospitalService;
+    @Autowired
+    private CPTCodeService            cptService;
 
     @Autowired
     private BasicHealthMetricsService bhmService;
@@ -210,6 +214,7 @@ public class APIOfficeVisitTest {
     @WithMockUser ( username = "hcp", roles = { "HCP" } )
     public void testOfficeVisitAPI () throws Exception {
 
+        cptService.deleteAll();
         Assert.assertEquals( 0, officeVisitService.count() );
 
         final OfficeVisitForm visit = new OfficeVisitForm();
@@ -219,14 +224,18 @@ public class APIOfficeVisitTest {
         visit.setNotes( "Test office visit" );
         visit.setType( AppointmentType.GENERAL_CHECKUP.toString() );
         visit.setHospital( "iTrust Test Hospital 2" );
-        final CPTCodeForm cost1 = new CPTCodeForm();
+        final CPTCode cost1 = new CPTCode();
         cost1.setCode( "99202" );
         cost1.setDescription( "Bandaid" );
-        cost1.setId( 1L );
+        cost1.setId( 999L );
         cost1.setCost( 10 );
         cost1.setArchive( false );
+        cptService.save( cost1 );
+        assertEquals( "99202", cost1.getCode() );
+        assertEquals( "99202", cptService.findById( cost1.getId() ).getCode() );
+        final CPTCodeForm code = new CPTCodeForm( cptService.findById( cost1.getId() ) );
         final List<CPTCodeForm> codes = new Vector<CPTCodeForm>();
-        codes.add( cost1 );
+        codes.add( code );
         visit.setCPTCodes( codes );
 
         System.out.println( codes.get( 0 ).getCode() );
