@@ -1,6 +1,7 @@
 package edu.ncsu.csc.iTrust2.models;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -110,6 +111,7 @@ public class Bill extends DomainObject {
         setCost( cost );
         setStatus( "Unpaid" );
         setDate( ZonedDateTime.now() );
+        payments = new ArrayList<Payment>();
     }
 
     /**
@@ -119,9 +121,10 @@ public class Bill extends DomainObject {
      *            amount being paid
      * @return true if payment occurs
      */
-    public Boolean pay ( final int pay ) {
-        if ( !status.equals( "Fully Paid" ) && pay <= cost ) {
-            cost -= pay;
+    public Boolean pay ( final Payment pay ) {
+        if ( !status.equals( "Fully Paid" ) && pay.getAmount() <= cost ) {
+            payments.add( pay );
+            cost -= pay.getAmount();
             if ( cost == 0 ) {
                 setStatus( "Fully Paid" );
             }
