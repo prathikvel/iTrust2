@@ -36,9 +36,9 @@
 			<h4 style="color: red" ng-model="message"></h4>
 
 			<h1>Bill</h1>
-			<p>Patient: {{bill.patient.username}}</p>
-			<p>Office Visit Date: {{bill.date}}</p>
-			<p>Attending Health Care Professional: {{bill.hcp.username}}</p>
+			<p><strong>Patient:</strong> {{bill.patient.username}}</p>
+			<p><strong>Office Visit Date:</strong> {{bill.date}}</p>
+			<p><strong>Attending Health Care Professional:</strong> {{bill.hcp.username}}</p>
 			<table class="table">
 				<tr>
 					<th>CPT Code</th>
@@ -53,8 +53,8 @@
 				</tr>
 			</table>
 			
-			<p>Total: {{bill.cost}}</p>
-			<p>Bill Status: {{bill.status}}</p>
+			<p><strong>Total:</strong> {{bill.cost}}</p>
+			<p><strong>Bill Status:</strong> {{bill.status}}</p>
 		</div>
 	</div>
 </body>
