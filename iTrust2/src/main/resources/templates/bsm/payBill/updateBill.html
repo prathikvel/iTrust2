@@ -52,44 +52,73 @@
 		<div ng-app="payBillApp" ng-controller="payBillCtrl">
 			<!-- Info on tables from https://hello-angularjs.appspot.com/removetablerow -->
 			<h4 style="color: red" ng-model="message"></h4>
+			
+			<h1>Pay Bill</h1>
+			<table style="width: 100%">
+				<tr>
+					<td style="vertical-align: top">
+						<h3>Current Bill</h3>
+						
+						<p><strong>Patient:</strong> {{bill.patient.username}}</p>
+						<p><strong>Office Visit Date:</strong> {{bill.date}}</p>
+						<p><strong>Attending Health Care Professional:</strong> {{bill.hcp.username}}</p>
+						<table class="table">
+							<tr>
+								<th>CPT Code</th>
+								<th>Description</th>
+								<th>Cost</th>
+							</tr>
+							<tr name="codeRow" ng-repeat="c in bill.cptCodes | orderBy: 'code'"
+								codeId={{c.id}}>
+								<td name="codeCell">{{c.code}}</td>
+								<td name="descriptionCell">{{c.description}}</td>
+								<td name="costCell">{{c.cost}}</td>
+							</tr>
+						</table>
+						
+						<p><strong>Total:</strong> {{bill.cost}}</p>
+						<p><strong>Bill Status:</strong> {{bill.status}}</p>
+					</td>
 
-			<div style="padding: 0px 0px 20px 30px">
-				<h3>Update Bill</h3>
-			</div>
-
-			<form class="form-horizontal" role="form" name="payBillForm">
-				<div class="form-group" style="padding-left: 30px">
-					<label>Cash</label>
-					<input type="number" class="form-control" name="cash"
-						ng-model="formBill.cash" required />
-				</div>
-				<div class="form-group" style="padding-left: 30px">
-					<label>Check</label>
-					<input type="number" class="form-control" name="check"
-						ng-model="formBill.check" required />
-				</div>
-				<div class="form-group" style="padding-left: 30px">
-					<label>Credit Card</label>
-					<input type="number" class="form-control" name="creditCard"
-						ng-model="formBill.creditCard" required />
-				</div>
-				<div class="form-group" style="padding-left: 30px">
-					<label>Insurance</label>
-					<input type="number" class="form-control" name="insurance"
-						ng-model="formBill.insurance" required />
-				</div>
-
-				<div class="form-group" style="padding-left: 30px">
-					<button class="btn btn-primary"
-					name="submit" ng-click="payBill(payBillForm.$valid)">Submit</button>
-					<!-- <input type="submit" value="Add Code" class="btn btn-primary"/>  -->
-				</div>
-			</form>
-
-			<div>
-				<!-- <h4 style="color: red" ng-show="addCodeForm.$valid">Code doesn't meet specifications</h4>  -->
-				<p style="color: red" ng-model="errorAdding" id="errP">{{errorAdding}}</p>
-			</div>
+					<td style="width: 40%; vertical-align: top">
+						<h3>Update Bill</h3>
+			
+						<form class="form-horizontal" role="form" name="payBillForm">
+							<div class="form-group" style="padding-left: 30px">
+								<label>Cash</label>
+								<input type="number" class="form-control" name="cash"
+									ng-model="formBill.cash" required />
+							</div>
+							<div class="form-group" style="padding-left: 30px">
+								<label>Check</label>
+								<input type="number" class="form-control" name="check"
+									ng-model="formBill.check" required />
+							</div>
+							<div class="form-group" style="padding-left: 30px">
+								<label>Credit Card</label>
+								<input type="number" class="form-control" name="creditCard"
+									ng-model="formBill.creditCard" required />
+							</div>
+							<div class="form-group" style="padding-left: 30px">
+								<label>Insurance</label>
+								<input type="number" class="form-control" name="insurance"
+									ng-model="formBill.insurance" required />
+							</div>
+			
+							<div class="form-group" style="padding-left: 30px">
+								<button class="btn btn-primary"
+								name="submit" ng-click="payBill(payBillForm.$valid)">Submit</button>
+								<!-- <input type="submit" value="Add Code" class="btn btn-primary"/>  -->
+							</div>
+						</form>
+			
+						<div>
+							<!-- <h4 style="color: red" ng-show="addCodeForm.$valid">Code doesn't meet specifications</h4>  -->
+							<p style="color: red" ng-model="errorAdding" id="errP">{{errorAdding}}</p>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 </body>
